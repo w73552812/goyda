@@ -15,8 +15,7 @@
   --bg-tertiary: #252b3b;
   --bg-hover: #2d3748;
   --bg-active: #3b82f6;
-  --bg-message-in: #252b3b;
-  --bg-message-out: #3b82f6;
+  --bg-message: #252b3b;
   --text-primary: #e2e8f0;
   --text-secondary: #94a3b8;
   --accent: #3b82f6;
@@ -44,83 +43,111 @@ body {
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; transition: all 0.3s; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
-/* ===== AUTH ===== */
-.auth-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #1e293b 100%);
-}
-
-.auth-container {
-  background: var(--bg-secondary);
-  border-radius: 24px;
-  padding: 48px 40px;
-  width: 440px;
-  max-width: 90vw;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  animation: slideUp 0.5s ease;
-}
-
+/* ===== ANIMATIONS ===== */
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.auth-logo {
-  text-align: center;
-  margin-bottom: 32px;
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ===== AUTH ===== */
+.auth-screen {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #1e293b 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-screen::before {
+  content: ''; position: absolute; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+  top: -200px; right: -200px; border-radius: 50%;
+  animation: pulse 8s ease-in-out infinite;
+}
+
+.auth-container {
+  background: var(--bg-secondary); border-radius: 24px;
+  padding: 48px 40px; width: 440px; max-width: 90vw;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative; z-index: 1;
+}
+
+.auth-logo { text-align: center; margin-bottom: 32px; }
+
 .auth-logo i {
-  font-size: 56px;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 12px;
-  display: block;
+  font-size: 56px; background: var(--accent-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 12px; display: block;
+  animation: bounce 2s ease-in-out infinite;
 }
 
 .auth-logo h1 {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 28px; font-weight: 700;
   background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
 .auth-logo p { color: var(--text-secondary); font-size: 14px; margin-top: 8px; }
 
 .btn-google {
-  width: 100%;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
+  width: 100%; padding: 14px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--bg-tertiary); color: var(--text-primary);
   margin-bottom: 16px;
 }
 
-.btn-google:hover { background: var(--bg-hover); transform: translateY(-1px); }
+.btn-google:hover {
+  background: var(--bg-hover); transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
 
 .btn-google i {
   font-size: 18px;
   background: linear-gradient(135deg, #ea4335, #fbbc05, #34a853, #4285f4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
 .auth-divider {
@@ -135,24 +162,24 @@ body {
 .auth-divider span { padding: 0 12px; }
 
 .auth-tabs {
-  display: flex;
-  background: var(--bg-tertiary);
-  border-radius: var(--radius);
-  padding: 4px;
-  margin-bottom: 24px;
+  display: flex; background: var(--bg-tertiary);
+  border-radius: var(--radius); padding: 4px; margin-bottom: 24px;
 }
 
 .auth-tab {
   flex: 1; padding: 10px; text-align: center;
   border-radius: var(--radius-sm); cursor: pointer;
   font-size: 14px; font-weight: 500; color: var(--text-secondary);
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.auth-tab.active { background: var(--accent); color: white; }
+.auth-tab.active {
+  background: var(--accent); color: white;
+  transform: scale(1.02);
+}
 
 .auth-form { display: none; }
-.auth-form.active { display: block; }
+.auth-form.active { display: block; animation: fadeIn 0.4s ease; }
 
 .form-group { margin-bottom: 16px; }
 
@@ -165,37 +192,43 @@ body {
   width: 100%; padding: 12px 16px;
   background: var(--bg-tertiary); border: 1px solid var(--border);
   border-radius: var(--radius-sm); color: var(--text-primary);
-  font-size: 15px; outline: none; transition: all 0.2s;
+  font-size: 15px; outline: none; transition: all 0.3s;
 }
 
 .form-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+  transform: translateY(-1px);
 }
 
 .btn {
   width: 100%; padding: 14px; border: none;
   border-radius: var(--radius-sm); font-size: 15px; font-weight: 600;
-  cursor: pointer; transition: all 0.2s;
+  cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 
-.btn-primary { background: var(--accent); color: white; }
+.btn-primary {
+  background: var(--accent); color: white;
+}
 
 .btn-primary:hover {
-  background: var(--accent-hover); transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+  background: var(--accent-hover); transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59,130,246,0.4);
 }
+
+.btn-primary:active { transform: translateY(0); }
 
 /* ===== MAIN APP ===== */
 .app { display: none; height: 100vh; }
-.app.active { display: flex; }
+.app.active { display: flex; animation: fadeIn 0.5s ease; }
 
 .sidebar {
   width: 380px; min-width: 380px;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
+  transition: all 0.3s;
 }
 
 .sidebar-header {
@@ -207,11 +240,14 @@ body {
 .sidebar-menu-btn {
   width: 40px; height: 40px; border-radius: 50%;
   border: none; background: transparent; color: var(--text-secondary);
-  font-size: 18px; cursor: pointer; transition: all 0.2s;
+  font-size: 18px; cursor: pointer; transition: all 0.3s;
   display: flex; align-items: center; justify-content: center;
 }
 
-.sidebar-menu-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.sidebar-menu-btn:hover {
+  background: var(--bg-hover); color: var(--text-primary);
+  transform: rotate(90deg);
+}
 
 .search-box { flex: 1; position: relative; }
 
@@ -219,25 +255,42 @@ body {
   width: 100%; padding: 10px 16px 10px 40px;
   background: var(--bg-tertiary); border: 1px solid var(--border);
   border-radius: 22px; color: var(--text-primary);
-  font-size: 14px; outline: none;
+  font-size: 14px; outline: none; transition: all 0.3s;
 }
 
-.search-box input:focus { border-color: var(--accent); }
+.search-box input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
 .search-box i {
   position: absolute; left: 14px; top: 50%;
   transform: translateY(-50%); color: var(--text-secondary);
+  transition: all 0.3s;
 }
+
+.search-box input:focus + i { color: var(--accent); }
 
 .chat-list { flex: 1; overflow-y: auto; padding: 8px; }
 
 .chat-item {
   display: flex; align-items: center; padding: 12px;
   border-radius: var(--radius); cursor: pointer;
-  transition: all 0.2s; gap: 12px; position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 12px; position: relative;
+  animation: slideInLeft 0.4s ease;
 }
 
-.chat-item:hover { background: var(--bg-hover); }
-.chat-item.active { background: rgba(59,130,246,0.15); border: 1px solid var(--accent); }
+.chat-item:hover {
+  background: var(--bg-hover);
+  transform: translateX(4px);
+}
+
+.chat-item.active {
+  background: rgba(59,130,246,0.15);
+  border: 1px solid var(--accent);
+  transform: scale(1.02);
+}
 
 .chat-avatar {
   width: 54px; height: 54px; border-radius: 50%;
@@ -245,7 +298,10 @@ body {
   justify-content: center; font-size: 20px; font-weight: 600;
   color: white; position: relative;
   background: var(--accent-gradient); overflow: hidden;
+  transition: all 0.3s;
 }
+
+.chat-item:hover .chat-avatar { transform: scale(1.1); }
 
 .chat-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -253,6 +309,7 @@ body {
   content: ''; position: absolute; bottom: 2px; right: 2px;
   width: 14px; height: 14px; background: var(--online);
   border: 3px solid var(--bg-secondary); border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
 }
 
 .chat-info { flex: 1; min-width: 0; }
@@ -287,6 +344,7 @@ body {
   background: var(--accent); color: white; font-size: 12px; font-weight: 600;
   min-width: 22px; height: 22px; border-radius: 11px;
   display: flex; align-items: center; justify-content: center; padding: 0 6px;
+  animation: scaleIn 0.3s ease;
 }
 
 /* ===== CHAT AREA ===== */
@@ -301,6 +359,7 @@ body {
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center;
   justify-content: space-between;
+  animation: slideInLeft 0.4s ease;
 }
 
 .chat-header-left { display: flex; align-items: center; gap: 12px; flex: 1; }
@@ -315,51 +374,39 @@ body {
 
 .chat-header-actions { display: flex; gap: 8px; }
 
-/* ===== PINNED MESSAGE BAR ===== */
+/* ===== PINNED MESSAGES BAR ===== */
 .pinned-bar {
   padding: 8px 20px;
   background: rgba(59,130,246,0.1);
   border-bottom: 1px solid var(--border);
-  display: none;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  transition: background 0.2s;
+  display: none; flex-direction: column; gap: 4px;
+  cursor: pointer; transition: all 0.3s;
+  animation: slideInLeft 0.4s ease;
 }
 
 .pinned-bar.active { display: flex; }
 .pinned-bar:hover { background: rgba(59,130,246,0.2); }
 
-.pinned-bar i { color: var(--accent); font-size: 16px; }
-
-.pinned-bar-content {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.pinned-bar-item {
+  display: flex; align-items: center; gap: 8px;
   font-size: 13px;
 }
 
-.pinned-bar-label {
-  font-size: 11px;
-  color: var(--accent);
-  font-weight: 600;
-  text-transform: uppercase;
+.pinned-bar i { color: var(--accent); font-size: 14px; }
+
+.pinned-bar-text {
+  flex: 1; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; color: var(--text-secondary);
 }
 
 .pinned-bar-close {
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 20px; height: 20px; border-radius: 50%;
+  border: none; background: transparent; color: var(--text-secondary);
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: all 0.3s;
 }
 
-.pinned-bar-close:hover { background: var(--bg-hover); }
+.pinned-bar-close:hover { background: var(--bg-hover); color: var(--danger); }
 
 /* ===== MESSAGES ===== */
 .messages-container {
@@ -368,66 +415,151 @@ body {
 }
 
 .message {
-  max-width: 70%; padding: 10px 14px;
+  max-width: 80%; padding: 10px 14px;
   border-radius: var(--radius); position: relative;
-  word-wrap: break-word; animation: msgIn 0.2s ease;
-  transition: all 0.2s;
-}
-
-.message:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-
-@keyframes msgIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.message.in {
-  background: var(--bg-message-in);
+  word-wrap: break-word;
+  animation: msgIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s;
+  /* All messages aligned left */
   align-self: flex-start;
-  border-bottom-left-radius: 4px;
+  background: var(--bg-message);
 }
 
-.message.out {
-  background: var(--bg-message-out);
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
+.message:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-.message.highlight {
-  animation: highlightPulse 2s ease;
+.message.reply {
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
 }
 
-@keyframes highlightPulse {
-  0% { background: rgba(59,130,246,0.4); }
-  100% { background: var(--bg-message-in); }
+.message.reply-preview {
+  background: rgba(59,130,246,0.1);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
 }
 
 .message-text { font-size: 14px; line-height: 1.4; }
+
 .message-text .mention {
-  color: var(--accent);
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
+  color: var(--accent); font-weight: 600;
+  cursor: pointer; text-decoration: none;
 }
 
 .message-text .mention:hover { text-decoration: underline; }
 
-.message-image {
+.message-image, .message-video, .message-gif {
   max-width: 100%; border-radius: var(--radius-sm);
   margin: 8px 0; cursor: pointer;
+  transition: all 0.3s;
 }
 
-.message-reactions { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+.message-image:hover, .message-video:hover, .message-gif:hover {
+  transform: scale(1.02);
+}
+
+.message-sticker {
+  width: 120px; height: 120px;
+  object-fit: contain;
+  background: transparent;
+}
+
+/* Voice message */
+.voice-message {
+  display: flex; align-items: center; gap: 10px;
+  min-width: 200px; padding: 8px;
+}
+
+.voice-play-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--accent); border: none; color: white;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: all 0.3s;
+}
+
+.voice-play-btn:hover {
+  background: var(--accent-hover); transform: scale(1.1);
+}
+
+.voice-wave {
+  flex: 1; height: 30px; display: flex;
+  align-items: center; gap: 2px;
+}
+
+.voice-bar {
+  width: 3px; background: rgba(255,255,255,0.3);
+  border-radius: 2px; transition: all 0.3s;
+}
+
+.voice-bar.playing {
+  background: var(--accent);
+  animation: wave 1s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { height: 8px; }
+  50% { height: 24px; }
+}
+
+/* Poll */
+.poll-container {
+  background: rgba(0,0,0,0.2);
+  border-radius: var(--radius-sm);
+  padding: 12px; margin: 8px 0;
+}
+
+.poll-question {
+  font-weight: 600; margin-bottom: 10px;
+}
+
+.poll-option {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: all 0.3s;
+  margin-bottom: 4px;
+}
+
+.poll-option:hover { background: rgba(255,255,255,0.05); }
+.poll-option.selected { background: rgba(59,130,246,0.2); }
+
+.poll-bar {
+  flex: 1; height: 6px; background: rgba(255,255,255,0.1);
+  border-radius: 3px; overflow: hidden;
+}
+
+.poll-bar-fill {
+  height: 100%; background: var(--accent);
+  border-radius: 3px; transition: width 0.5s ease;
+}
+
+.poll-votes {
+  font-size: 12px; color: var(--text-secondary);
+  min-width: 40px; text-align: right;
+}
+
+.message-reactions {
+  display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap;
+}
 
 .reaction {
   background: var(--bg-tertiary); border: 1px solid var(--border);
   border-radius: 12px; padding: 2px 6px; font-size: 12px;
   cursor: pointer; display: flex; align-items: center; gap: 2px;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 
-.reaction:hover { background: var(--bg-hover); }
-.reaction.active { background: var(--accent); border-color: var(--accent); }
+.reaction:hover {
+  background: var(--bg-hover); transform: scale(1.1);
+}
+
+.reaction.active {
+  background: var(--accent); border-color: var(--accent);
+}
 
 .message-meta {
   display: flex; align-items: center;
@@ -441,10 +573,11 @@ body {
 .message-edited { font-size: 11px; opacity: 0.5; font-style: italic; }
 
 .message-actions {
-  position: absolute; top: -30px; right: 10px;
+  position: absolute; top: -36px; right: 10px;
   background: var(--bg-secondary); border-radius: var(--radius-sm);
   padding: 4px; display: none; gap: 4px;
   box-shadow: var(--shadow); border: 1px solid var(--border);
+  animation: scaleIn 0.2s ease;
 }
 
 .message:hover .message-actions { display: flex; }
@@ -453,68 +586,54 @@ body {
   width: 28px; height: 28px; border-radius: 6px; border: none;
   background: transparent; color: var(--text-secondary);
   cursor: pointer; display: flex; align-items: center;
-  justify-content: center; transition: all 0.2s; font-size: 12px;
+  justify-content: center; transition: all 0.3s; font-size: 12px;
 }
 
-.message-action-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
-
-/* ===== MENTION AUTOCOMPLETE ===== */
-.mention-dropdown {
-  position: absolute;
-  bottom: 80px;
-  left: 20px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  max-height: 200px;
-  overflow-y: auto;
-  display: none;
-  z-index: 50;
-  box-shadow: var(--shadow);
-  min-width: 200px;
+.message-action-btn:hover {
+  background: var(--bg-hover); color: var(--text-primary);
+  transform: scale(1.1);
 }
 
-.mention-dropdown.active { display: block; }
-
-.mention-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: background 0.2s;
+/* ===== REPLY & COMMENTS ===== */
+.reply-to {
+  background: rgba(59,130,246,0.1);
+  border-left: 3px solid var(--accent);
+  padding: 6px 10px; margin-bottom: 6px;
+  border-radius: var(--radius-sm);
+  font-size: 13px; color: var(--text-secondary);
+  cursor: pointer; transition: all 0.3s;
 }
 
-.mention-item:hover, .mention-item.selected {
-  background: var(--bg-hover);
+.reply-to:hover { background: rgba(59,130,246,0.2); }
+
+.comments-section {
+  margin-top: 8px; padding-top: 8px;
+  border-top: 1px solid var(--border);
 }
 
-.mention-item-avatar {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  display: flex; align-items: center;
-  justify-content: center;
-  font-size: 14px; font-weight: 600;
-  background: var(--accent-gradient);
-  overflow: hidden;
+.comments-count {
+  font-size: 13px; color: var(--text-secondary);
+  cursor: pointer; transition: all 0.3s;
 }
 
-.mention-item-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-.mention-item-name { font-size: 14px; font-weight: 500; }
-.mention-item-username { font-size: 12px; color: var(--text-secondary); }
+.comments-count:hover { color: var(--accent); }
 
 /* ===== MESSAGE INPUT ===== */
 .message-input-area {
   padding: 16px 20px; background: var(--bg-secondary);
   border-top: 1px solid var(--border);
   display: flex; align-items: flex-end; gap: 12px;
+  animation: slideInLeft 0.4s ease;
 }
 
 .msg-input-wrapper {
   flex: 1; background: var(--bg-tertiary);
   border-radius: 24px; padding: 10px 16px;
-  position: relative;
+  position: relative; transition: all 0.3s;
+}
+
+.msg-input-wrapper:focus-within {
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
 }
 
 .msg-input-wrapper textarea {
@@ -526,33 +645,167 @@ body {
 .send-btn {
   width: 44px; height: 44px; border-radius: 50%;
   border: none; background: var(--accent); color: white;
-  font-size: 18px; cursor: pointer; transition: all 0.2s;
+  font-size: 18px; cursor: pointer; transition: all 0.3s;
   display: flex; align-items: center; justify-content: center;
 }
 
-.send-btn:hover { background: var(--accent-hover); transform: scale(1.05); }
+.send-btn:hover {
+  background: var(--accent-hover); transform: scale(1.1) rotate(15deg);
+}
 
-/* ===== REACTION PICKER ===== */
-.reaction-picker {
-  position: absolute; bottom: 80px;
+.send-btn:active { transform: scale(0.95); }
+
+/* ===== STICKER & GIF PICKER ===== */
+.sticker-gif-picker {
+  position: absolute; bottom: 80px; left: 20px;
   background: var(--bg-secondary); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 8px;
-  display: none; gap: 4px; box-shadow: var(--shadow); z-index: 100;
+  border-radius: var(--radius); width: 320px;
+  display: none; flex-direction: column;
+  box-shadow: var(--shadow); z-index: 100;
+  animation: scaleIn 0.3s ease;
 }
 
-.reaction-picker.active { display: flex; }
+.sticker-gif-picker.active { display: flex; }
 
-.reaction-option {
-  font-size: 24px; padding: 4px 8px; cursor: pointer;
-  border-radius: var(--radius-sm); transition: all 0.2s;
+.sticker-gif-tabs {
+  display: flex; border-bottom: 1px solid var(--border);
 }
 
-.reaction-option:hover { background: var(--bg-hover); transform: scale(1.2); }
+.sticker-gif-tab {
+  flex: 1; padding: 12px; text-align: center;
+  cursor: pointer; transition: all 0.3s;
+  font-size: 14px; font-weight: 500;
+}
+
+.sticker-gif-tab.active {
+  background: var(--accent); color: white;
+}
+
+.sticker-gif-content {
+  max-height: 300px; overflow-y: auto;
+  padding: 12px;
+}
+
+.sticker-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.sticker-item {
+  width: 100%; aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  cursor: pointer; transition: all 0.3s;
+  overflow: hidden;
+}
+
+.sticker-item:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.sticker-item img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+
+.gif-search {
+  padding: 8px; border-bottom: 1px solid var(--border);
+}
+
+.gif-search input {
+  width: 100%; padding: 8px 12px;
+  background: var(--bg-tertiary); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text-primary);
+  font-size: 14px; outline: none;
+}
+
+/* ===== RECORDING ===== */
+.recording-indicator {
+  display: none; align-items: center; gap: 12px;
+  padding: 12px 20px; background: var(--danger);
+  color: white; border-radius: var(--radius);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.recording-indicator.active { display: flex; }
+
+.recording-time { font-weight: 600; }
+
+/* ===== MINI PLAYER ===== */
+.mini-player {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 56px; background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  display: none; align-items: center;
+  padding: 0 20px; gap: 16px; z-index: 50;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  animation: slideInLeft 0.4s ease;
+}
+
+.mini-player.active { display: flex; }
+
+.mini-player-cover {
+  width: 40px; height: 40px; border-radius: 8px;
+  background: var(--accent-gradient);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+
+.mini-player-cover.playing { animation: pulse 1s infinite; }
+
+.mini-player-info { flex: 1; min-width: 0; }
+
+.mini-player-title {
+  font-size: 14px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.mini-player-artist { font-size: 12px; color: var(--text-secondary); }
+
+.mini-player-progress {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px; background: var(--bg-tertiary);
+}
+
+.mini-player-progress-bar {
+  height: 100%; background: var(--accent-gradient);
+  width: 0%; transition: width 0.3s linear;
+}
+
+.mini-player-controls { display: flex; gap: 8px; }
+
+.mini-player-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: none; background: transparent; color: var(--text-primary);
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: all 0.3s; font-size: 16px;
+}
+
+.mini-player-btn:hover { background: var(--bg-hover); }
+
+.mini-player-btn.play {
+  background: var(--accent); color: white;
+  width: 40px; height: 40px;
+}
+
+.mini-player-time {
+  font-size: 12px; color: var(--text-secondary);
+  min-width: 80px; text-align: right;
+}
+
+.mini-player-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: none; background: transparent; color: var(--text-secondary);
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: all 0.3s;
+}
+
+.mini-player-close:hover { background: var(--bg-hover); }
 
 /* ===== SIDE MENU ===== */
 .side-menu-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.6); z-index: 100; display: none;
+  animation: fadeIn 0.3s ease;
 }
 
 .side-menu-overlay.active { display: block; }
@@ -561,7 +814,8 @@ body {
   position: fixed; top: 0; left: -320px;
   width: 300px; height: 100vh;
   background: var(--bg-secondary); z-index: 101;
-  transition: left 0.3s; display: flex; flex-direction: column;
+  transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex; flex-direction: column;
   border-right: 1px solid var(--border);
 }
 
@@ -578,7 +832,10 @@ body {
   font-size: 24px; font-weight: 600; color: white;
   margin-bottom: 12px; background: rgba(255,255,255,0.2);
   overflow: hidden; cursor: pointer; position: relative;
+  transition: all 0.3s;
 }
+
+.side-menu-avatar:hover { transform: scale(1.05); }
 
 .side-menu-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -590,10 +847,14 @@ body {
 .side-menu-item {
   display: flex; align-items: center; gap: 14px;
   padding: 12px 16px; border-radius: var(--radius-sm);
-  cursor: pointer; transition: all 0.2s; font-size: 15px;
+  cursor: pointer; transition: all 0.3s; font-size: 15px;
 }
 
-.side-menu-item:hover { background: var(--bg-hover); }
+.side-menu-item:hover {
+  background: var(--bg-hover);
+  transform: translateX(4px);
+}
+
 .side-menu-item i { width: 22px; text-align: center; color: var(--text-secondary); }
 
 .side-menu-divider { height: 1px; background: var(--border); margin: 8px 16px; }
@@ -603,6 +864,7 @@ body {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.7); z-index: 200;
   display: none; align-items: center; justify-content: center;
+  animation: fadeIn 0.3s ease;
 }
 
 .modal-overlay.active { display: flex; }
@@ -611,6 +873,7 @@ body {
   background: var(--bg-secondary); border-radius: 16px;
   width: 480px; max-width: 90vw; max-height: 80vh;
   overflow-y: auto; border: 1px solid var(--border);
+  animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-header {
@@ -623,40 +886,34 @@ body {
 
 .modal-close {
   width: 36px; height: 36px; border-radius: 50%;
-  border: none; background: transparent;
-  color: var(--text-secondary); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+  border: none; background: transparent; color: var(--text-secondary);
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: all 0.3s;
 }
 
-.modal-close:hover { background: var(--bg-hover); }
+.modal-close:hover { background: var(--bg-hover); transform: rotate(90deg); }
 
 .modal-body { padding: 24px; }
 
 /* ===== CROP MODAL ===== */
-.crop-modal {
-  width: 400px; max-width: 90vw;
-}
+.crop-modal { width: 400px; max-width: 90vw; }
 
 .crop-container {
-  width: 100%;
-  height: 300px;
+  width: 100%; height: 300px;
   background: var(--bg-tertiary);
   border-radius: var(--radius-sm);
-  overflow: hidden;
-  margin-bottom: 16px;
+  overflow: hidden; margin-bottom: 16px;
 }
 
-.crop-container img {
-  max-width: 100%;
-  display: block;
-}
+.crop-container img { max-width: 100%; display: block; }
 
 /* ===== PROFILE PANEL ===== */
 .profile-panel {
   position: fixed; top: 0; right: -480px;
   width: 480px; max-width: 100vw; height: 100vh;
   background: var(--bg-secondary); z-index: 101;
-  transition: right 0.3s; display: flex; flex-direction: column;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex; flex-direction: column;
   border-left: 1px solid var(--border);
 }
 
@@ -681,31 +938,31 @@ body {
   font-size: 48px; font-weight: 600; margin: 0 auto 16px;
   background: var(--accent-gradient); overflow: hidden;
   cursor: pointer; position: relative;
+  transition: all 0.3s;
 }
+
+.profile-big-avatar:hover { transform: scale(1.05); }
 
 .profile-big-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
 .profile-big-name { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
 
 .profile-big-username {
-  font-size: 15px;
-  color: var(--accent);
-  cursor: pointer;
-  margin-bottom: 8px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border-radius: 16px;
-  transition: background 0.2s;
+  font-size: 15px; color: var(--accent);
+  cursor: pointer; margin-bottom: 8px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 16px;
+  transition: all 0.3s;
 }
 
-.profile-big-username:hover { background: rgba(59,130,246,0.1); }
+.profile-big-username:hover {
+  background: rgba(59,130,246,0.1);
+  transform: scale(1.05);
+}
 
 .profile-big-username .copy-icon {
-  font-size: 12px;
-  opacity: 0;
-  transition: opacity 0.2s;
+  font-size: 12px; opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .profile-big-username:hover .copy-icon { opacity: 1; }
@@ -713,29 +970,21 @@ body {
 .profile-big-status { font-size: 14px; color: var(--text-secondary); }
 
 .profile-share-section {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 16px;
+  display: flex; justify-content: center;
+  gap: 12px; margin-top: 16px;
 }
 
 .share-btn {
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  font-size: 13px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s;
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--bg-secondary);
+  color: var(--text-primary); font-size: 13px;
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+  transition: all 0.3s;
 }
 
 .share-btn:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent); border-color: var(--accent);
+  transform: translateY(-2px);
 }
 
 .profile-stats {
@@ -746,25 +995,26 @@ body {
 .profile-stat {
   text-align: center; cursor: pointer;
   padding: 8px 16px; border-radius: var(--radius-sm);
-  transition: background 0.2s;
+  transition: all 0.3s;
 }
 
-.profile-stat:hover { background: var(--bg-hover); }
+.profile-stat:hover {
+  background: var(--bg-hover);
+  transform: scale(1.05);
+}
 
 .profile-stat-value { font-size: 20px; font-weight: 700; color: var(--accent); }
 .profile-stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
 
-/* ===== MUSIC PLAYER ===== */
+/* ===== MUSIC ===== */
 .music-section {
-  padding: 20px;
-  margin: 16px 0;
+  padding: 20px; margin: 16px 0;
   border-radius: var(--radius);
 }
 
 .music-section-title {
   font-size: 14px; font-weight: 600;
-  margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
 }
 
 .music-section-title i { color: var(--accent); }
@@ -774,26 +1024,26 @@ body {
 .music-item {
   display: flex; align-items: center; gap: 12px;
   padding: 10px; border-radius: var(--radius-sm);
-  cursor: pointer; transition: all 0.2s;
+  cursor: pointer; transition: all 0.3s;
 }
 
-.music-item:hover { background: var(--bg-hover); }
-.music-item.playing { background: rgba(59,130,246,0.15); }
+.music-item:hover {
+  background: var(--bg-hover);
+  transform: translateX(4px);
+}
+
+.music-item.playing {
+  background: rgba(59,130,246,0.15);
+}
 
 .music-item-icon {
-  width: 40px; height: 40px;
-  border-radius: 8px;
+  width: 40px; height: 40px; border-radius: 8px;
   background: var(--accent-gradient);
   display: flex; align-items: center; justify-content: center;
   font-size: 16px;
 }
 
 .music-item-icon.playing { animation: pulse 1s infinite; }
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-}
 
 .music-item-info { flex: 1; }
 .music-item-title { font-size: 14px; font-weight: 500; }
@@ -803,10 +1053,9 @@ body {
 
 .music-item-btn {
   width: 28px; height: 28px; border-radius: 50%;
-  border: none; background: transparent;
-  color: var(--text-secondary); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s; font-size: 12px;
+  border: none; background: transparent; color: var(--text-secondary);
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: all 0.3s; font-size: 12px;
 }
 
 .music-item-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
@@ -816,112 +1065,15 @@ body {
   width: 100%; padding: 10px;
   border: 2px dashed var(--border); border-radius: var(--radius-sm);
   background: transparent; color: var(--text-secondary);
-  cursor: pointer; transition: all 0.2s;
+  cursor: pointer; transition: all 0.3s;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   margin-top: 8px;
 }
 
-.add-music-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ===== MINI PLAYER BAR ===== */
-.mini-player {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 56px;
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border);
-  display: none;
-  align-items: center;
-  padding: 0 20px;
-  gap: 16px;
-  z-index: 50;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+.add-music-btn:hover {
+  border-color: var(--accent); color: var(--accent);
+  transform: translateY(-2px);
 }
-
-.mini-player.active { display: flex; }
-
-.mini-player-cover {
-  width: 40px; height: 40px;
-  border-radius: 8px;
-  background: var(--accent-gradient);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-}
-
-.mini-player-cover.playing { animation: pulse 1s infinite; }
-
-.mini-player-info { flex: 1; min-width: 0; }
-
-.mini-player-title {
-  font-size: 14px; font-weight: 600;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-
-.mini-player-artist { font-size: 12px; color: var(--text-secondary); }
-
-.mini-player-progress {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--bg-tertiary);
-}
-
-.mini-player-progress-bar {
-  height: 100%;
-  background: var(--accent-gradient);
-  width: 0%;
-  transition: width 0.3s linear;
-}
-
-.mini-player-controls { display: flex; gap: 8px; }
-
-.mini-player-btn {
-  width: 36px; height: 36px; border-radius: 50%;
-  border: none; background: transparent;
-  color: var(--text-primary); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s; font-size: 16px;
-}
-
-.mini-player-btn:hover { background: var(--bg-hover); }
-
-.mini-player-btn.play {
-  background: var(--accent);
-  color: white;
-  width: 40px; height: 40px;
-}
-
-.mini-player-btn.play:hover { background: var(--accent-hover); }
-
-.mini-player-time {
-  font-size: 12px;
-  color: var(--text-secondary);
-  min-width: 80px;
-  text-align: right;
-}
-
-.mini-player-close {
-  width: 32px; height: 32px;
-  border-radius: 50%; border: none;
-  background: transparent; color: var(--text-secondary);
-  cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
-
-.mini-player-close:hover { background: var(--bg-hover); }
-
-/* ===== GROUP/CHANNEL EDIT ===== */
-.edit-group-item {
-  display: flex; align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.edit-group-item:last-child { border-bottom: none; }
 
 /* ===== SETTINGS ===== */
 .settings-section { margin-bottom: 24px; }
@@ -936,25 +1088,24 @@ body {
   display: flex; align-items: center;
   justify-content: space-between;
   padding: 14px 0; border-bottom: 1px solid var(--border);
+  transition: all 0.3s;
 }
 
+.settings-item:hover { transform: translateX(4px); }
 .settings-item:last-child { border-bottom: none; }
 
 .toggle {
-  width: 48px; height: 26px;
-  background: var(--bg-tertiary);
+  width: 48px; height: 26px; background: var(--bg-tertiary);
   border-radius: 13px; position: relative;
-  cursor: pointer; transition: all 0.2s;
+  cursor: pointer; transition: all 0.3s;
 }
 
 .toggle.active { background: var(--accent); }
 
 .toggle::after {
-  content: ''; position: absolute;
-  top: 3px; left: 3px;
-  width: 20px; height: 20px;
-  background: white; border-radius: 50%;
-  transition: all 0.2s;
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px; background: white;
+  border-radius: 50%; transition: all 0.3s;
 }
 
 .toggle.active::after { left: 25px; }
@@ -962,8 +1113,7 @@ body {
 /* ===== TOAST ===== */
 .toast-container {
   position: fixed; bottom: 24px; right: 24px;
-  z-index: 300; display: flex;
-  flex-direction: column; gap: 8px;
+  z-index: 300; display: flex; flex-direction: column; gap: 8px;
 }
 
 .toast {
@@ -972,7 +1122,7 @@ body {
   box-shadow: var(--shadow); font-size: 14px;
   display: flex; align-items: center; gap: 10px;
   border: 1px solid var(--border);
-  animation: slideUp 0.3s ease;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .toast.success { border-left: 4px solid var(--success); }
@@ -998,11 +1148,18 @@ body {
 .user-select-item {
   display: flex; align-items: center; gap: 12px;
   padding: 10px; border-radius: var(--radius-sm);
-  cursor: pointer; transition: all 0.2s;
+  cursor: pointer; transition: all 0.3s;
 }
 
-.user-select-item:hover { background: var(--bg-hover); }
-.user-select-item.selected { background: rgba(59,130,246,0.2); border: 1px solid var(--accent); }
+.user-select-item:hover {
+  background: var(--bg-hover);
+  transform: translateX(4px);
+}
+
+.user-select-item.selected {
+  background: rgba(59,130,246,0.2);
+  border: 1px solid var(--accent);
+}
 
 .user-select-avatar {
   width: 40px; height: 40px; border-radius: 50%;
@@ -1019,26 +1176,30 @@ body {
 }
 
 .no-chat-content { text-align: center; }
-.no-chat-content i { font-size: 72px; margin-bottom: 16px; opacity: 0.3; }
+.no-chat-content i {
+  font-size: 72px; margin-bottom: 16px; opacity: 0.3;
+  animation: pulse 3s ease-in-out infinite;
+}
 .no-chat-content h3 { font-size: 18px; margin-bottom: 6px; color: var(--text-primary); }
 
-.loading { display: flex; align-items: center; justify-content: center; padding: 40px; }
-
-.loading-spinner {
-  width: 40px; height: 40px;
-  border: 3px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.loading {
+  display: flex; align-items: center; justify-content: center; padding: 40px;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+.loading-spinner {
+  width: 40px; height: 40px; border: 3px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
 
 .file-input-hidden { display: none; }
 
 @media (max-width: 768px) {
   .sidebar { width: 100%; min-width: 100%; position: absolute; z-index: 10; }
-  .chat-area { position: absolute; inset: 0; transform: translateX(100%); transition: transform 0.3s; }
+  .chat-area {
+    position: absolute; inset: 0;
+    transform: translateX(100%); transition: transform 0.4s;
+  }
   .chat-area.mobile-active { transform: translateX(0); }
   .profile-panel { width: 100%; }
 }
@@ -1079,9 +1240,7 @@ body {
 
 <!-- MINI PLAYER -->
 <div class="mini-player" id="miniPlayer">
-  <div class="mini-player-cover" id="miniPlayerCover">
-    <i class="fas fa-music"></i>
-  </div>
+  <div class="mini-player-cover" id="miniPlayerCover"><i class="fas fa-music"></i></div>
   <div class="mini-player-info">
     <div class="mini-player-title" id="miniPlayerTitle">—</div>
     <div class="mini-player-artist" id="miniPlayerArtist">—</div>
@@ -1095,9 +1254,7 @@ body {
     <button class="mini-player-btn" onclick="nextTrack()"><i class="fas fa-step-forward"></i></button>
   </div>
   <button class="mini-player-close" onclick="closeMiniPlayer()"><i class="fas fa-times"></i></button>
-  <div class="mini-player-progress">
-    <div class="mini-player-progress-bar" id="miniPlayerProgressBar"></div>
-  </div>
+  <div class="mini-player-progress"><div class="mini-player-progress-bar" id="miniPlayerProgressBar"></div></div>
 </div>
 
 <!-- MAIN APP -->
@@ -1136,35 +1293,35 @@ body {
         </div>
       </div>
       
-      <!-- PINNED MESSAGE BAR -->
-      <div class="pinned-bar" id="pinnedBar" onclick="scrollToPinned()">
-        <i class="fas fa-thumbtack"></i>
-        <div class="pinned-bar-content">
-          <div class="pinned-bar-label">Закреплённое сообщение</div>
-          <div id="pinnedBarText"></div>
-        </div>
-        <button class="pinned-bar-close" onclick="event.stopPropagation(); unpinMessage()"><i class="fas fa-times"></i></button>
-      </div>
+      <!-- PINNED MESSAGES BAR -->
+      <div class="pinned-bar" id="pinnedBar"></div>
       
       <div class="messages-container" id="messagesContainer"></div>
       
-      <!-- MENTION DROPDOWN -->
-      <div class="mention-dropdown" id="mentionDropdown"></div>
+      <!-- RECORDING INDICATOR -->
+      <div class="recording-indicator" id="recordingIndicator">
+        <i class="fas fa-circle" style="animation: pulse 1s infinite;"></i>
+        <span class="recording-time" id="recordingTime">0:00</span>
+        <button class="btn btn-sm" style="background:rgba(255,255,255,0.2);" onclick="stopRecording()"><i class="fas fa-stop"></i></button>
+      </div>
       
-      <!-- REACTION PICKER -->
-      <div class="reaction-picker" id="reactionPicker">
-        <span class="reaction-option" onclick="addReaction('👍')"></span>
-        <span class="reaction-option" onclick="addReaction('❤️')">❤️</span>
-        <span class="reaction-option" onclick="addReaction('😂')">😂</span>
-        <span class="reaction-option" onclick="addReaction('😮')">😮</span>
-        <span class="reaction-option" onclick="addReaction('😢')">😢</span>
-        <span class="reaction-option" onclick="addReaction('😡')">😡</span>
-        <span class="reaction-option" onclick="addReaction('🔥')">🔥</span>
-        <span class="reaction-option" onclick="addReaction('🎉')"></span>
+      <!-- STICKER/GIF PICKER -->
+      <div class="sticker-gif-picker" id="stickerGifPicker">
+        <div class="sticker-gif-tabs">
+          <div class="sticker-gif-tab active" onclick="switchStickerTab('stickers')">Стикеры</div>
+          <div class="sticker-gif-tab" onclick="switchStickerTab('gifs')">GIF</div>
+        </div>
+        <div class="gif-search" id="gifSearch" style="display:none;">
+          <input type="text" placeholder="Поиск GIF..." id="gifSearchInput" oninput="searchGifs()">
+        </div>
+        <div class="sticker-gif-content" id="stickerGifContent"></div>
       </div>
       
       <div class="message-input-area">
-        <button class="sidebar-menu-btn" onclick="uploadImage()"><i class="fas fa-image"></i></button>
+        <button class="sidebar-menu-btn" onclick="toggleStickerGifPicker()" title="Стикеры/GIF"><i class="far fa-laugh"></i></button>
+        <button class="sidebar-menu-btn" onclick="uploadImage()" title="Фото"><i class="fas fa-image"></i></button>
+        <button class="sidebar-menu-btn" onclick="startRecording()" title="Голосовое"><i class="fas fa-microphone"></i></button>
+        <button class="sidebar-menu-btn" onclick="recordVideo()" title="Видео"><i class="fas fa-video"></i></button>
         <div class="msg-input-wrapper">
           <textarea id="messageInput" placeholder="Сообщение..." rows="1" onkeydown="handleMsgKeydown(event)" oninput="handleInput(event)"></textarea>
         </div>
@@ -1176,6 +1333,7 @@ body {
 
 <input type="file" id="imageInput" class="file-input-hidden" accept="image/*">
 <input type="file" id="audioInput" class="file-input-hidden" accept="audio/*">
+<input type="file" id="videoInput" class="file-input-hidden" accept="video/*">
 
 <!-- SIDE MENU -->
 <div class="side-menu-overlay" id="sideMenuOverlay" onclick="toggleSideMenu()"></div>
@@ -1224,6 +1382,23 @@ body {
         <h4>Конфиденциальность</h4>
         <div class="settings-item"><span>Показывать статус "в сети"</span><div class="toggle active" id="toggleOnline" onclick="this.classList.toggle('active')"></div></div>
         <div class="settings-item"><span>Показывать время посещения</span><div class="toggle active" id="toggleLastSeen" onclick="this.classList.toggle('active')"></div></div>
+        <div class="settings-item"><span>Разрешить добавление в группы</span><div class="toggle active" id="toggleGroups" onclick="this.classList.toggle('active')"></div></div>
+      </div>
+      <div class="settings-section">
+        <h4>Уведомления</h4>
+        <div class="settings-item"><span>Звуковые уведомления</span><div class="toggle active" id="toggleSound" onclick="this.classList.toggle('active')"></div></div>
+        <div class="settings-item"><span>Push-уведомления</span><div class="toggle active" id="togglePush" onclick="this.classList.toggle('active')"></div></div>
+        <div class="settings-item"><span>Уведомления от всех</span><div class="toggle" id="toggleAllNotifs" onclick="this.classList.toggle('active')"></div></div>
+      </div>
+      <div class="settings-section">
+        <h4>Чат</h4>
+        <div class="settings-item"><span>Автовоспроизведение GIF</span><div class="toggle active" id="toggleAutoGif" onclick="this.classList.toggle('active')"></div></div>
+        <div class="settings-item"><span>Отправка по Enter</span><div class="toggle active" id="toggleEnterSend" onclick="this.classList.toggle('active')"></div></div>
+      </div>
+      <div class="settings-section">
+        <h4>Медиа</h4>
+        <div class="settings-item"><span>Автосохранение фото</span><div class="toggle" id="toggleAutoSave" onclick="this.classList.toggle('active')"></div></div>
+        <div class="settings-item"><span>Качество загрузки</span><select class="form-input" style="width:auto;margin-top:8px;"><option>Высокое</option><option>Среднее</option><option>Низкое</option></select></div>
       </div>
     </div>
   </div>
@@ -1254,17 +1429,19 @@ body {
   </div>
 </div>
 
-<!-- EDIT GROUP/CHANNEL -->
-<div class="modal-overlay" id="editGroupModal">
+<!-- CREATE POLL -->
+<div class="modal-overlay" id="createPollModal">
   <div class="modal">
-    <div class="modal-header"><h2 id="editGroupTitle">Редактировать</h2><button class="modal-close" onclick="closeModal('editGroupModal')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-header"><h2>Создать опрос</h2><button class="modal-close" onclick="closeModal('createPollModal')"><i class="fas fa-times"></i></button></div>
     <div class="modal-body">
-      <div class="form-group"><label>Название</label><input type="text" class="form-input" id="editGroupName"></div>
-      <div class="form-group"><label>Описание</label><input type="text" class="form-input" id="editGroupDesc"></div>
-      <div style="display:flex;gap:12px;margin-top:16px;">
-        <button class="btn btn-primary" onclick="saveGroupEdit()"><i class="fas fa-save"></i> Сохранить</button>
-        <button class="btn btn-primary" style="background:var(--danger);" onclick="deleteGroup()"><i class="fas fa-trash"></i> Удалить</button>
+      <div class="form-group"><label>Вопрос</label><input type="text" class="form-input" id="pollQuestion"></div>
+      <div id="pollOptions">
+        <div class="form-group"><label>Вариант 1</label><input type="text" class="form-input poll-option-input"></div>
+        <div class="form-group"><label>Вариант 2</label><input type="text" class="form-input poll-option-input"></div>
       </div>
+      <button class="btn btn-secondary btn-sm" onclick="addPollOption()" style="margin-bottom:16px;"><i class="fas fa-plus"></i> Добавить вариант</button>
+      <div class="settings-item" style="margin-bottom:16px;"><span>Анонимный опрос</span><div class="toggle" id="pollAnonymous" onclick="this.classList.toggle('active')"></div></div>
+      <button class="btn btn-primary" onclick="createPoll()"><i class="fas fa-check"></i> Создать опрос</button>
     </div>
   </div>
 </div>
@@ -1285,9 +1462,7 @@ body {
   <div class="modal crop-modal">
     <div class="modal-header"><h2>Кадрирование фото</h2><button class="modal-close" onclick="closeModal('cropModal')"><i class="fas fa-times"></i></button></div>
     <div class="modal-body">
-      <div class="crop-container" id="cropContainer">
-        <img id="cropImage" src="">
-      </div>
+      <div class="crop-container" id="cropContainer"><img id="cropImage" src=""></div>
       <button class="btn btn-primary" onclick="applyCrop()"><i class="fas fa-check"></i> Применить</button>
     </div>
   </div>
@@ -1321,6 +1496,9 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 const CLOUDINARY_CLOUD_NAME = 'dfdgbusqb';
 const CLOUDINARY_UPLOAD_PRESET = '123123';
 
+// Giphy API (free tier)
+const GIPHY_API_KEY = 'hDnKx55fh1OJ0j3QNpLJL8UrjgxXPL90'; // Get from https://developers.giphy.com/
+
 const APP = {
   user: null, userData: null, currentChat: null,
   chats: [], messages: {}, allUsers: [],
@@ -1328,7 +1506,14 @@ const APP = {
   currentReactionMsg: null, mentionQuery: '',
   mentionIndex: -1, cropper: null, cropFile: null,
   audioPlayer: null, musicTracks: [],
-  currentTrackIndex: -1, isPlaying: false
+  currentTrackIndex: -1, isPlaying: false,
+  isRecording: false, recordingStartTime: null,
+  recordingInterval: null, mediaRecorder: null,
+  audioChunks: [], currentStickerTab: 'stickers',
+  settings: {
+    sound: true, push: true, allNotifs: false,
+    autoGif: true, enterSend: true, autoSave: false
+  }
 };
 
 // ===== CLOUDINARY =====
@@ -1344,8 +1529,7 @@ async function uploadToCloudinary(file) {
 // ===== CROP =====
 function openCropModal() {
   const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
+  input.type = 'file'; input.accept = 'image/*';
   input.onchange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -1355,16 +1539,11 @@ function openCropModal() {
       const img = document.getElementById('cropImage');
       img.src = ev.target.result;
       document.getElementById('cropModal').classList.add('active');
-      
       setTimeout(() => {
         if (APP.cropper) APP.cropper.destroy();
         APP.cropper = new Cropper(img, {
-          aspectRatio: 1,
-          viewMode: 1,
-          guides: true,
-          background: false,
-          autoCropArea: 0.8,
-          responsive: true
+          aspectRatio: 1, viewMode: 1, guides: true,
+          background: false, autoCropArea: 0.8, responsive: true
         });
       }, 100);
     };
@@ -1375,14 +1554,11 @@ function openCropModal() {
 
 async function applyCrop() {
   if (!APP.cropper) return;
-  
   const canvas = APP.cropper.getCroppedCanvas({ width: 300, height: 300 });
   const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-  
   try {
     showToast('Загрузка...', 'info');
     const photoURL = await uploadToCloudinary(new File([blob], 'avatar.png', { type: 'image/png' }));
-    
     await db.collection('users').doc(APP.user.uid).update({ photoURL });
     APP.userData.photoURL = photoURL;
     updateSideMenu();
@@ -1393,7 +1569,7 @@ async function applyCrop() {
   }
 }
 
-// ===== AUDIO =====
+// ===== AUDIO & MUSIC =====
 function initAudioPlayer() {
   if (!APP.audioPlayer) {
     APP.audioPlayer = new Audio();
@@ -1406,11 +1582,9 @@ function initAudioPlayer() {
 function updateMiniPlayer() {
   const p = APP.audioPlayer;
   if (!p || !p.duration) return;
-  
   const pct = (p.currentTime / p.duration) * 100;
   document.getElementById('miniPlayerProgressBar').style.width = pct + '%';
-  document.getElementById('miniPlayerTime').textContent = 
-    formatDuration(p.currentTime) + ' / ' + formatDuration(p.duration);
+  document.getElementById('miniPlayerTime').textContent = formatDuration(p.currentTime) + ' / ' + formatDuration(p.duration);
 }
 
 function formatDuration(sec) {
@@ -1421,20 +1595,15 @@ function formatDuration(sec) {
 
 async function playMusic(trackUrl, title, artist, index) {
   initAudioPlayer();
-  
   APP.audioPlayer.src = trackUrl;
   APP.audioPlayer.play().catch(() => showToast('Ошибка воспроизведения', 'error'));
-  
   APP.currentTrackIndex = index;
   APP.isPlaying = true;
-  
   document.getElementById('miniPlayerTitle').textContent = title || '—';
   document.getElementById('miniPlayerArtist').textContent = artist || '—';
   document.getElementById('miniPlayerPlayIcon').className = 'fas fa-pause';
   document.getElementById('miniPlayer').classList.add('active');
   document.getElementById('miniPlayerCover').classList.add('playing');
-  
-  // Push app down
   document.getElementById('mainApp').style.marginTop = '56px';
 }
 
@@ -1483,21 +1652,14 @@ async function uploadMusic() {
   input.onchange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    
     showToast('Загрузка музыки...', 'info');
-    
-    // Upload to Cloudinary
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
     formData.append('resource_type', 'auto');
-    
     try {
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`, {
-        method: 'POST', body: formData
-      });
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`, { method: 'POST', body: formData });
       const data = await response.json();
-      
       const musicData = {
         title: file.name.replace(/\.[^/.]+$/, ''),
         artist: APP.userData.name,
@@ -1505,11 +1667,7 @@ async function uploadMusic() {
         duration: data.duration || 0,
         addedAt: firebase.firestore.FieldValue.serverTimestamp()
       };
-      
-      await db.collection('users').doc(APP.user.uid).update({
-        music: firebase.firestore.FieldValue.arrayUnion(musicData)
-      });
-      
+      await db.collection('users').doc(APP.user.uid).update({ music: firebase.firestore.FieldValue.arrayUnion(musicData) });
       showToast('Музыка добавлена!', 'success');
       renderProfilePanel();
     } catch(err) {
@@ -1528,25 +1686,244 @@ function deleteMusic(index) {
   renderProfilePanel();
 }
 
+// ===== VOICE & VIDEO RECORDING =====
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    APP.mediaRecorder = new MediaRecorder(stream);
+    APP.audioChunks = [];
+    APP.mediaRecorder.ondataavailable = (e) => APP.audioChunks.push(e.data);
+    APP.mediaRecorder.onstop = async () => {
+      const audioBlob = new Blob(APP.audioChunks, { type: 'audio/webm' });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      await sendVoiceMessage(audioBlob);
+    };
+    APP.mediaRecorder.start();
+    APP.isRecording = true;
+    APP.recordingStartTime = Date.now();
+    document.getElementById('recordingIndicator').classList.add('active');
+    APP.recordingInterval = setInterval(updateRecordingTime, 1000);
+  } catch(err) {
+    showToast('Ошибка доступа к микрофону', 'error');
+  }
+}
+
+function updateRecordingTime() {
+  const elapsed = Math.floor((Date.now() - APP.recordingStartTime) / 1000);
+  document.getElementById('recordingTime').textContent = formatDuration(elapsed);
+}
+
+function stopRecording() {
+  if (APP.mediaRecorder && APP.isRecording) {
+    APP.mediaRecorder.stop();
+    APP.mediaRecorder.stream.getTracks().forEach(track => track.stop());
+    APP.isRecording = false;
+    document.getElementById('recordingIndicator').classList.remove('active');
+    clearInterval(APP.recordingInterval);
+  }
+}
+
+async function sendVoiceMessage(blob) {
+  if (!APP.currentChat) return;
+  try {
+    const formData = new FormData();
+    formData.append('file', blob);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    formData.append('resource_type', 'video');
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`, { method: 'POST', body: formData });
+    const data = await response.json();
+    await db.collection('chats').doc(APP.currentChat.id).collection('messages').add({
+      senderId: APP.user.uid, senderName: APP.userData.name,
+      type: 'voice', voiceUrl: data.secure_url, duration: Math.floor((Date.now() - APP.recordingStartTime) / 1000),
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      reactions: {}, edited: false, pinned: false, read: false
+    });
+    showToast('Голосовое отправлено', 'success');
+  } catch(err) {
+    showToast('Ошибка: ' + err.message, 'error');
+  }
+}
+
+async function recordVideo() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    const mediaRecorder = new MediaRecorder(stream);
+    const chunks = [];
+    mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+    mediaRecorder.onstop = async () => {
+      const videoBlob = new Blob(chunks, { type: 'video/webm' });
+      const formData = new FormData();
+      formData.append('file', videoBlob);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      formData.append('resource_type', 'video');
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`, { method: 'POST', body: formData });
+      const data = await response.json();
+      await db.collection('chats').doc(APP.currentChat.id).collection('messages').add({
+        senderId: APP.user.uid, senderName: APP.userData.name,
+        type: 'video', videoUrl: data.secure_url,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        reactions: {}, edited: false, pinned: false, read: false
+      });
+      stream.getTracks().forEach(track => track.stop());
+      showToast('Видео отправлено', 'success');
+    };
+    mediaRecorder.start();
+    showToast('Запись видео... Нажмите ещё раз для остановки', 'info');
+    setTimeout(() => mediaRecorder.stop(), 10000); // Auto stop after 10s
+  } catch(err) {
+    showToast('Ошибка доступа к камере', 'error');
+  }
+}
+
+// ===== STICKERS & GIFS =====
+function toggleStickerGifPicker() {
+  document.getElementById('stickerGifPicker').classList.toggle('active');
+  if (document.getElementById('stickerGifPicker').classList.contains('active')) {
+    loadStickers();
+  }
+}
+
+function switchStickerTab(tab) {
+  APP.currentStickerTab = tab;
+  document.querySelectorAll('.sticker-gif-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  if (tab === 'stickers') {
+    document.getElementById('gifSearch').style.display = 'none';
+    loadStickers();
+  } else {
+    document.getElementById('gifSearch').style.display = 'block';
+    searchGifs('trending');
+  }
+}
+
+async function loadStickers() {
+  // Sample stickers (replace with your own or API)
+  const stickers = [
+    'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm55eHl6eHl6eHl6eHl6eHl6eHl6eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/13CoXDiaCcCoyk/giphy.gif',
+    'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm55eHl6eHl6eHl6eHl6eHl6eHl6eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/l0HlNQ03J5JxX6lva/giphy.gif',
+    'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm55eHl6eHl6eHl6eHl6eHl6eHl6eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3o7TKSjRrfIPjeiVyM/giphy.gif'
+  ];
+  
+  const content = document.getElementById('stickerGifContent');
+  content.innerHTML = '<div class="sticker-grid">' + stickers.map(s => 
+    `<div class="sticker-item" onclick="sendSticker('${s}')"><img src="${s}" loading="lazy"></div>`
+  ).join('') + '</div>';
+}
+
+async function searchGifs(query = 'trending') {
+  if (!query) return;
+  try {
+    const url = query === 'trending' 
+      ? `https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&limit=20`
+      : `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=20`;
+    
+    const response = await fetch(url);
+    const data = await response.json();
+    const gifs = data.data.map(g => g.images.downsized.url);
+    
+    const content = document.getElementById('stickerGifContent');
+    content.innerHTML = '<div class="sticker-grid">' + gifs.map(g => 
+      `<div class="sticker-item" onclick="sendGif('${g}')"><img src="${g}" loading="lazy"></div>`
+    ).join('') + '</div>';
+  } catch(err) {
+    console.error('Giphy error:', err);
+  }
+}
+
+async function sendSticker(url) {
+  if (!APP.currentChat) return;
+  await db.collection('chats').doc(APP.currentChat.id).collection('messages').add({
+    senderId: APP.user.uid, senderName: APP.userData.name,
+    type: 'sticker', stickerUrl: url,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    reactions: {}, edited: false, pinned: false, read: false
+  });
+  document.getElementById('stickerGifPicker').classList.remove('active');
+}
+
+async function sendGif(url) {
+  if (!APP.currentChat) return;
+  await db.collection('chats').doc(APP.currentChat.id).collection('messages').add({
+    senderId: APP.user.uid, senderName: APP.userData.name,
+    type: 'gif', gifUrl: url,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    reactions: {}, edited: false, pinned: false, read: false
+  });
+  document.getElementById('stickerGifPicker').classList.remove('active');
+}
+
+// ===== POLLS =====
+function addPollOption() {
+  const container = document.getElementById('pollOptions');
+  const count = container.children.length + 1;
+  const div = document.createElement('div');
+  div.className = 'form-group';
+  div.innerHTML = `<label>Вариант ${count}</label><input type="text" class="form-input poll-option-input">`;
+  container.appendChild(div);
+}
+
+async function createPoll() {
+  const question = document.getElementById('pollQuestion').value.trim();
+  const optionInputs = document.querySelectorAll('.poll-option-input');
+  const options = Array.from(optionInputs).map(i => i.value.trim()).filter(v => v);
+  
+  if (!question || options.length < 2) {
+    showToast('Введите вопрос и минимум 2 варианта', 'error');
+    return;
+  }
+  
+  const anonymous = document.getElementById('pollAnonymous').classList.contains('active');
+  
+  await db.collection('chats').doc(APP.currentChat.id).collection('messages').add({
+    senderId: APP.user.uid, senderName: APP.userData.name,
+    type: 'poll', poll: {
+      question, options,
+      votes: options.map(() => []),
+      anonymous,
+      totalVotes: 0
+    },
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    reactions: {}, edited: false, pinned: false, read: false
+  });
+  
+  closeModal('createPollModal');
+  showToast('Опрос создан!', 'success');
+}
+
+async function votePoll(msgId, optionIndex) {
+  const msg = APP.messages[APP.currentChat.id]?.find(m => m.id === msgId);
+  if (!msg || !msg.poll) return;
+  
+  const poll = msg.poll;
+  const userId = APP.user.uid;
+  
+  // Remove previous vote if exists
+  poll.votes.forEach((voters, idx) => {
+    const i = voters.indexOf(userId);
+    if (i > -1) voters.splice(i, 1);
+  });
+  
+  // Add new vote
+  poll.votes[optionIndex].push(userId);
+  poll.totalVotes = poll.votes.flat().length;
+  
+  await db.collection('chats').doc(APP.currentChat.id).collection('messages').doc(msgId).update({ 'poll': poll });
+}
+
 // ===== AUTH =====
 async function signInWithGoogle() {
   try {
     const result = await auth.signInWithPopup(googleProvider);
     const user = result.user;
     const userDoc = await db.collection('users').doc(user.uid).get();
-    
     if (!userDoc.exists) {
       const username = 'user' + Math.random().toString(36).substr(2, 8);
       await db.collection('users').doc(user.uid).set({
-        name: user.displayName || 'User',
-        username: username,
-        email: user.email,
-        photoURL: user.photoURL || '',
-        bio: '',
+        name: user.displayName || 'User', username,
+        email: user.email, photoURL: user.photoURL || '', bio: '',
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        online: true,
-        privacy: { showOnline: true, showLastSeen: true },
-        music: []
+        online: true, privacy: { showOnline: true, showLastSeen: true },
+        music: [], settings: APP.settings
       });
       await db.collection('usernames').doc(username).set({ uid: user.uid });
     } else {
@@ -1571,15 +1948,13 @@ async function handleRegister(e) {
   const username = document.getElementById('regUsername').value.trim().replace('@', '').toLowerCase();
   const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value;
-  
   try {
     const cred = await auth.createUserWithEmailAndPassword(email, password);
     await db.collection('users').doc(cred.user.uid).set({
       name, username, email, bio: '', photoURL: '',
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      online: true,
-      privacy: { showOnline: true, showLastSeen: true },
-      music: []
+      online: true, privacy: { showOnline: true, showLastSeen: true },
+      music: [], settings: APP.settings
     });
     await db.collection('usernames').doc(username).set({ uid: cred.user.uid });
   } catch(err) {
@@ -1611,6 +1986,7 @@ auth.onAuthStateChanged(async (user) => {
     const doc = await db.collection('users').doc(user.uid).get();
     if (doc.exists) {
       APP.userData = doc.data();
+      if (doc.data().settings) APP.settings = { ...APP.settings, ...doc.data().settings };
       await db.collection('users').doc(user.uid).update({ online: true });
       showApp();
     }
@@ -1647,7 +2023,6 @@ function uploadImage() {
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         reactions: {}, edited: false, pinned: false, read: false
       });
-      updateChatLastMessage(APP.currentChat.id, '📷 Фото');
     } catch(err) {
       showToast('Ошибка: ' + err.message, 'error');
     }
@@ -1662,36 +2037,27 @@ async function loadChats() {
     .then(async (snapshot) => {
       APP.chats = [];
       const chatIds = new Set();
-      
       for (const doc of snapshot.docs) {
         if (chatIds.has(doc.id)) continue;
         chatIds.add(doc.id);
-        
         const data = doc.data();
         const chatData = { id: doc.id, ...data };
-        
         const otherUids = (data.members || []).filter(m => m !== uid);
         chatData.otherMembers = [];
         for (const mUid of otherUids) {
           const mDoc = await db.collection('users').doc(mUid).get();
           if (mDoc.exists) chatData.otherMembers.push({ uid: mUid, ...mDoc.data() });
         }
-        
         const unreadSnap = await db.collection('chats').doc(doc.id).collection('unread').doc(uid).get();
         chatData.unread = unreadSnap.exists ? unreadSnap.data().count || 0 : 0;
-        
         APP.chats.push(chatData);
       }
-      
       APP.chats.sort((a, b) => {
         const aTime = a.lastMessageTime?.toDate?.()?.getTime() || a.createdAt?.toDate?.()?.getTime() || 0;
         const bTime = b.lastMessageTime?.toDate?.()?.getTime() || b.createdAt?.toDate?.()?.getTime() || 0;
         return bTime - aTime;
       });
-      
       renderChatList();
-      
-      // Real-time updates
       APP.chats.forEach(chat => {
         db.collection('chats').doc(chat.id).onSnapshot(doc => {
           if (doc.exists) {
@@ -1707,25 +2073,15 @@ async function loadChats() {
     });
 }
 
-async function updateChatLastMessage(chatId, msg) {
-  await db.collection('chats').doc(chatId).update({
-    lastMessage: msg,
-    lastMessageTime: firebase.firestore.FieldValue.serverTimestamp(),
-    lastMessageSender: APP.userData.name
-  });
-}
-
 function renderChatList() {
   const container = document.getElementById('chatList');
   const search = document.getElementById('searchInput').value.toLowerCase();
   let filtered = APP.chats;
   if (search) filtered = filtered.filter(c => getChatName(c).toLowerCase().includes(search));
-  
   if (filtered.length === 0) {
     container.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-secondary);">Нет чатов</div>';
     return;
   }
-  
   container.innerHTML = filtered.map(chat => {
     const name = getChatName(chat);
     const lastMsg = chat.lastMessage || 'Нет сообщений';
@@ -1734,7 +2090,6 @@ function renderChatList() {
     const typeIcon = chat.type === 'group' ? '<i class="fas fa-users chat-type-icon group"></i>' : 
                      chat.type === 'channel' ? '<i class="fas fa-bullhorn chat-type-icon channel"></i>' : '';
     const photoURL = chat.type === 'private' && chat.otherMembers[0]?.photoURL ? chat.otherMembers[0].photoURL : null;
-    
     return `
       <div class="chat-item ${isActive ? 'active' : ''}" onclick="openChat('${chat.id}')">
         <div class="chat-avatar ${chat.type === 'private' && chat.otherMembers[0]?.online ? 'online' : ''}" 
@@ -1764,17 +2119,13 @@ function getChatName(chat) {
 async function openChat(chatId) {
   const chat = APP.chats.find(c => c.id === chatId);
   if (!chat) return;
-  
   APP.currentChat = chat;
   await db.collection('chats').doc(chatId).collection('unread').doc(APP.user.uid).set({ count: 0 });
-  
   document.getElementById('noChatSelected').style.display = 'none';
   document.getElementById('activeChatView').style.display = 'flex';
-  
   const name = getChatName(chat);
   const photoURL = chat.type === 'private' && chat.otherMembers[0]?.photoURL ? chat.otherMembers[0].photoURL : null;
   const avatar = document.getElementById('chatHeaderAvatar');
-  
   if (photoURL) {
     avatar.style.backgroundImage = `url(${photoURL})`;
     avatar.style.backgroundSize = 'cover';
@@ -1783,9 +2134,7 @@ async function openChat(chatId) {
     avatar.style.backgroundImage = '';
     avatar.textContent = name.charAt(0).toUpperCase();
   }
-  
   document.getElementById('chatHeaderName').innerHTML = name;
-  
   if (chat.type === 'private' && chat.otherMembers[0]) {
     document.getElementById('chatHeaderStatus').textContent = chat.otherMembers[0].online ? 'в сети' : 'был(а) недавно';
   } else if (chat.type === 'group') {
@@ -1793,7 +2142,6 @@ async function openChat(chatId) {
   } else {
     document.getElementById('chatHeaderStatus').textContent = 'канал';
   }
-  
   loadMessages(chatId);
   renderChatList();
 }
@@ -1812,20 +2160,63 @@ function loadMessages(chatId) {
 function renderMessages(chatId) {
   const container = document.getElementById('messagesContainer');
   const msgs = APP.messages[chatId] || [];
-  
   let html = msgs.map(msg => {
-    const isIn = msg.senderId !== APP.user.uid;
     const time = msg.timestamp ? formatTimeShort(msg.timestamp.toDate()) : '';
     const reactions = msg.reactions || {};
-    
+    const isPinned = msg.pinned;
     let content = '';
-    if (msg.type === 'image' && msg.imageUrl) {
-      content = `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}')">`;
-    } else if (msg.text) {
-      const processedText = processMentions(msg.text);
-      content = `<div class="message-text">${processedText}</div>`;
+    
+    // Reply preview
+    if (msg.replyTo) {
+      const replyMsg = msgs.find(m => m.id === msg.replyTo);
+      if (replyMsg) {
+        content += `<div class="reply-to" onclick="scrollToMessage('${msg.replyTo}')">
+          <strong>${replyMsg.senderName}</strong>: ${replyMsg.text || replyMsg.type}
+        </div>`;
+      }
     }
     
+    // Message content
+    if (msg.type === 'image' && msg.imageUrl) {
+      content += `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}')">`;
+    } else if (msg.type === 'gif' && msg.gifUrl) {
+      content += `<img src="${msg.gifUrl}" class="message-gif" onclick="window.open('${msg.gifUrl}')">`;
+    } else if (msg.type === 'sticker' && msg.stickerUrl) {
+      content += `<img src="${msg.stickerUrl}" class="message-sticker">`;
+    } else if (msg.type === 'voice' && msg.voiceUrl) {
+      content += `
+        <div class="voice-message">
+          <button class="voice-play-btn" onclick="playVoice('${msg.voiceUrl}', this)"><i class="fas fa-play"></i></button>
+          <div class="voice-wave">
+            ${Array(20).fill(0).map((_, i) => `<div class="voice-bar" style="height:${Math.random()*20+8}px"></div>`).join('')}
+          </div>
+          <span style="font-size:12px;color:var(--text-secondary)">${formatDuration(msg.duration || 0)}</span>
+        </div>`;
+    } else if (msg.type === 'video' && msg.videoUrl) {
+      content += `<video src="${msg.videoUrl}" class="message-video" controls></video>`;
+    } else if (msg.type === 'poll' && msg.poll) {
+      const poll = msg.poll;
+      content += `<div class="poll-container">
+        <div class="poll-question">${poll.question}</div>
+        ${poll.options.map((opt, i) => {
+          const votes = poll.votes[i]?.length || 0;
+          const pct = poll.totalVotes > 0 ? (votes / poll.totalVotes * 100) : 0;
+          const voted = poll.votes[i]?.includes(APP.user.uid);
+          return `
+            <div class="poll-option ${voted ? 'selected' : ''}" onclick="votePoll('${msg.id}', ${i})">
+              <div class="poll-bar"><div class="poll-bar-fill" style="width:${pct}%"></div></div>
+              <span style="margin-left:8px;">${opt}</span>
+              <span class="poll-votes">${votes} (${Math.round(pct)}%)</span>
+            </div>
+          `;
+        }).join('')}
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:8px;">${poll.totalVotes} голосов${poll.anonymous ? ' • Анонимно' : ''}</div>
+      </div>`;
+    } else if (msg.text) {
+      content += `<div class="message-text">${processMentions(msg.text)}</div>`;
+    }
+    
+    // Reactions
     let reactionsHtml = '';
     if (Object.keys(reactions).length > 0) {
       reactionsHtml = '<div class="message-reactions">';
@@ -1838,20 +2229,27 @@ function renderMessages(chatId) {
       reactionsHtml += '</div>';
     }
     
+    // Comments for channel posts
+    let commentsHtml = '';
+    if (msg.type === 'channel' && msg.commentsCount > 0) {
+      commentsHtml = `<div class="comments-section"><div class="comments-count" onclick="showComments('${msg.id}')"><i class="far fa-comment"></i> ${msg.commentsCount} комментариев</div></div>`;
+    }
+    
     return `
-      <div class="message ${isIn ? 'in' : 'out'} ${msg.pinned ? 'highlight' : ''}" data-msg-id="${msg.id}" id="msg-${msg.id}">
-        ${msg.text ? `<div class="message-text">${processMentions(msg.text)}</div>` : ''}
-        ${msg.imageUrl ? `<img src="${msg.imageUrl}" class="message-image" onclick="window.open('${msg.imageUrl}')">` : ''}
+      <div class="message ${isPinned ? 'highlight' : ''} ${msg.replyTo ? 'reply' : ''}" data-msg-id="${msg.id}" id="msg-${msg.id}">
+        ${content}
         ${reactionsHtml}
+        ${commentsHtml}
         <div class="message-meta">
           <span class="message-time">${time}</span>
           ${msg.edited ? '<span class="message-edited">(изм.)</span>' : ''}
-          ${!isIn ? `<i class="fas fa-check${msg.read ? '-double read' : ''} message-status"></i>` : ''}
+          ${!msg.isChannel ? `<i class="fas fa-check${msg.read ? '-double read' : ''} message-status"></i>` : ''}
         </div>
         <div class="message-actions">
           <button class="message-action-btn" onclick="showReactionPicker('${msg.id}')" title="Реакция"><i class="far fa-smile"></i></button>
+          <button class="message-action-btn" onclick="replyToMessage('${msg.id}')" title="Ответить"><i class="fas fa-reply"></i></button>
           <button class="message-action-btn" onclick="togglePinMessage('${msg.id}')" title="Закрепить"><i class="fas fa-thumbtack"></i></button>
-          ${!isIn ? `
+          ${!msg.isChannel ? `
             <button class="message-action-btn" onclick="editMessage('${msg.id}')" title="Редактировать"><i class="fas fa-edit"></i></button>
             <button class="message-action-btn" onclick="deleteMessage('${msg.id}')" title="Удалить" style="color:var(--danger);"><i class="fas fa-trash"></i></button>
           ` : ''}
@@ -1859,7 +2257,6 @@ function renderMessages(chatId) {
       </div>
     `;
   }).join('');
-  
   container.innerHTML = html;
   container.scrollTop = container.scrollHeight;
 }
@@ -1877,57 +2274,18 @@ function mentionClick(username) {
 function handleInput(e) {
   const text = e.target.value;
   const cursorPos = e.target.selectionStart;
-  
-  // Check for @ mention
   const beforeCursor = text.substring(0, cursorPos);
   const match = beforeCursor.match(/@(\w*)$/);
-  
   const dropdown = document.getElementById('mentionDropdown');
   
   if (match) {
     APP.mentionQuery = match[1].toLowerCase();
-    const filtered = APP.allUsers.filter(u => 
-      u.uid !== APP.user.uid && u.username.toLowerCase().startsWith(APP.mentionQuery)
-    );
-    
+    const filtered = APP.allUsers.filter(u => u.uid !== APP.user.uid && u.username.toLowerCase().startsWith(APP.mentionQuery));
     if (filtered.length > 0) {
-      dropdown.innerHTML = filtered.slice(0, 5).map((u, i) => `
-        <div class="mention-item ${i === 0 ? 'selected' : ''}" onclick="insertMention('${u.username}')">
-          <div class="mention-item-avatar" style="${u.photoURL ? `background-image:url(${u.photoURL});background-size:cover;` : ''}">
-            ${!u.photoURL ? u.name.charAt(0).toUpperCase() : ''}
-          </div>
-          <div>
-            <div class="mention-item-name">${u.name}</div>
-            <div class="mention-item-username">@${u.username}</div>
-          </div>
-        </div>
-      `).join('');
-      dropdown.classList.add('active');
-    } else {
-      dropdown.classList.remove('active');
+      // Render mention dropdown (add HTML element if not exists)
     }
-  } else {
-    dropdown.classList.remove('active');
   }
-  
-  // Typing indicator
   handleTyping();
-}
-
-function insertMention(username) {
-  const input = document.getElementById('messageInput');
-  const text = input.value;
-  const cursorPos = input.selectionStart;
-  
-  const beforeCursor = text.substring(0, cursorPos);
-  const afterCursor = text.substring(cursorPos);
-  const mentionStart = beforeCursor.lastIndexOf('@');
-  
-  const newText = text.substring(0, mentionStart) + '@' + username + ' ' + afterCursor;
-  input.value = newText;
-  input.focus();
-  
-  document.getElementById('mentionDropdown').classList.remove('active');
 }
 
 // ===== MESSAGING =====
@@ -1935,17 +2293,22 @@ async function sendMessage() {
   const input = document.getElementById('messageInput');
   const text = input.value.trim();
   if (!text || !APP.currentChat) return;
-  
   const chatId = APP.currentChat.id;
   
-  await db.collection('chats').doc(chatId).collection('messages').add({
+  const msgData = {
     senderId: APP.user.uid, senderName: APP.userData.name,
     type: 'text', text,
     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     reactions: {}, edited: false, pinned: false, read: false
-  });
+  };
   
-  updateChatLastMessage(chatId, text.substring(0, 50));
+  if (APP.replyToMsg) {
+    msgData.replyTo = APP.replyToMsg;
+    delete APP.replyToMsg;
+  }
+  
+  await db.collection('chats').doc(chatId).collection('messages').add(msgData);
+  await updateChatLastMessage(chatId, text.substring(0, 50));
   await db.collection('chats').doc(chatId).collection('typing').doc(APP.user.uid).delete();
   
   const chat = APP.currentChat;
@@ -1957,20 +2320,26 @@ async function sendMessage() {
   }
   
   input.value = '';
-  document.getElementById('mentionDropdown').classList.remove('active');
+}
+
+async function replyToMessage(msgId) {
+  APP.replyToMsg = msgId;
+  const msg = APP.messages[APP.currentChat.id]?.find(m => m.id === msgId);
+  if (msg) {
+    const input = document.getElementById('messageInput');
+    input.placeholder = `Ответ на сообщение от ${msg.senderName}...`;
+    input.focus();
+  }
 }
 
 async function editMessage(msgId) {
   const msg = APP.messages[APP.currentChat.id]?.find(m => m.id === msgId);
   if (!msg || !msg.text) return;
-  
   const newText = prompt('Редактировать сообщение:', msg.text);
   if (newText && newText !== msg.text) {
     await db.collection('chats').doc(APP.currentChat.id).collection('messages').doc(msgId).update({
-      text: newText, edited: true,
-      editedAt: firebase.firestore.FieldValue.serverTimestamp()
+      text: newText, edited: true, editedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    updateChatLastMessage(APP.currentChat.id, newText.substring(0, 50));
   }
 }
 
@@ -1979,15 +2348,21 @@ async function deleteMessage(msgId) {
   await db.collection('chats').doc(APP.currentChat.id).collection('messages').doc(msgId).delete();
 }
 
-// ===== PINNED MESSAGES =====
+// ===== PINNED MESSAGES (MULTIPLE) =====
 function updatePinnedBar() {
   const msgs = APP.messages[APP.currentChat?.id] || [];
-  const pinned = msgs.find(m => m.pinned);
+  const pinned = msgs.filter(m => m.pinned);
   const bar = document.getElementById('pinnedBar');
   
-  if (pinned) {
+  if (pinned.length > 0) {
     bar.classList.add('active');
-    document.getElementById('pinnedBarText').textContent = pinned.text || '📷 Фото';
+    bar.innerHTML = pinned.map((msg, i) => `
+      <div class="pinned-bar-item" onclick="scrollToMessage('${msg.id}')">
+        <i class="fas fa-thumbtack"></i>
+        <span class="pinned-bar-text">${msg.text || '📷 Фото'}</span>
+        <button class="pinned-bar-close" onclick="event.stopPropagation();unpinMessage('${msg.id}')"><i class="fas fa-times"></i></button>
+      </div>
+    `).join('');
   } else {
     bar.classList.remove('active');
   }
@@ -1996,37 +2371,20 @@ function updatePinnedBar() {
 async function togglePinMessage(msgId) {
   const msg = APP.messages[APP.currentChat.id]?.find(m => m.id === msgId);
   if (!msg) return;
-  
-  // Unpin all others first
-  const msgs = APP.messages[APP.currentChat.id] || [];
-  for (const m of msgs) {
-    if (m.pinned && m.id !== msgId) {
-      await db.collection('chats').doc(APP.currentChat.id).collection('messages').doc(m.id).update({ pinned: false });
-    }
-  }
-  
   await db.collection('chats').doc(APP.currentChat.id).collection('messages').doc(msgId).update({ pinned: !msg.pinned });
   showToast(msg.pinned ? 'Сообщение откреплено' : 'Сообщение закреплено', 'info');
 }
 
-async function unpinMessage() {
-  const msgs = APP.messages[APP.currentChat?.id] || [];
-  const pinned = msgs.find(m => m.pinned);
-  if (pinned) {
-    await db.collection('chats').doc(APP.currentChat.id).collection('messages').doc(pinned.id).update({ pinned: false });
-  }
+async function unpinMessage(msgId) {
+  await db.collection('chats').doc(APP.currentChat.id).collection('messages').doc(msgId).update({ pinned: false });
 }
 
-function scrollToPinned() {
-  const msgs = APP.messages[APP.currentChat?.id] || [];
-  const pinned = msgs.find(m => m.pinned);
-  if (pinned) {
-    const el = document.getElementById('msg-' + pinned.id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      el.classList.add('highlight');
-      setTimeout(() => el.classList.remove('highlight'), 3000);
-    }
+function scrollToMessage(msgId) {
+  const el = document.getElementById('msg-' + msgId);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.style.background = 'rgba(59,130,246,0.3)';
+    setTimeout(() => el.style.background = '', 2000);
   }
 }
 
@@ -2036,14 +2394,11 @@ async function toggleReaction(msgId, emoji) {
   const msgRef = db.collection('chats').doc(chatId).collection('messages').doc(msgId);
   const msg = APP.messages[chatId]?.find(m => m.id === msgId);
   if (!msg) return;
-  
   const reactions = { ...msg.reactions } || {};
   if (!reactions[emoji]) reactions[emoji] = [];
-  
   const idx = reactions[emoji].indexOf(APP.user.uid);
   if (idx > -1) reactions[emoji].splice(idx, 1);
   else reactions[emoji].push(APP.user.uid);
-  
   await msgRef.update({ reactions });
 }
 
@@ -2068,31 +2423,10 @@ async function handleTyping() {
     userId: APP.user.uid, userName: APP.userData.name,
     timestamp: firebase.firestore.FieldValue.serverTimestamp()
   });
-  
   if (APP.typingTimeout) clearTimeout(APP.typingTimeout);
   APP.typingTimeout = setTimeout(async () => {
     await db.collection('chats').doc(chatId).collection('typing').doc(APP.user.uid).delete();
   }, 2000);
-  
-  db.collection('chats').doc(chatId).collection('typing')
-    .where('userId', '!=', APP.user.uid)
-    .onSnapshot(snapshot => {
-      const typingUsers = [];
-      snapshot.forEach(doc => typingUsers.push(doc.data().userName));
-      
-      const indicator = document.getElementById('typingIndicator');
-      if (!indicator) return;
-      
-      if (typingUsers.length > 0) {
-        indicator.textContent = typingUsers.join(', ') + ' печатает...';
-        indicator.style.color = 'var(--text-secondary)';
-        indicator.style.fontSize = '13px';
-        indicator.style.padding = '4px 20px';
-        indicator.style.display = 'block';
-      } else {
-        indicator.style.display = 'none';
-      }
-    });
 }
 
 // ===== GROUPS/CHANNELS =====
@@ -2132,7 +2466,6 @@ async function createGroup() {
   const desc = document.getElementById('groupDesc').value.trim();
   if (!name) return showToast('Введите название', 'error');
   if (APP.selectedMembers.length === 0) return showToast('Добавьте участников', 'error');
-  
   try {
     await db.collection('chats').add({
       type: 'group', name, description: desc,
@@ -2155,7 +2488,6 @@ async function createChannel() {
   const name = document.getElementById('channelName').value.trim();
   const desc = document.getElementById('channelDesc').value.trim();
   if (!name) return showToast('Введите название', 'error');
-  
   try {
     await db.collection('chats').add({
       type: 'channel', name, description: desc,
@@ -2174,14 +2506,13 @@ async function createChannel() {
   }
 }
 
-// ===== EDIT/DELETE GROUPS & CHANNELS =====
+// ===== EDIT GROUP/CHANNEL =====
 let editingChatId = null;
 
 function openEditGroupModal(chatId) {
   editingChatId = chatId;
   const chat = APP.chats.find(c => c.id === chatId);
   if (!chat) return;
-  
   document.getElementById('editGroupTitle').textContent = chat.type === 'group' ? 'Редактировать группу' : 'Редактировать канал';
   document.getElementById('editGroupName').value = chat.name || '';
   document.getElementById('editGroupDesc').value = chat.description || '';
@@ -2192,9 +2523,7 @@ async function saveGroupEdit() {
   if (!editingChatId) return;
   const name = document.getElementById('editGroupName').value.trim();
   const desc = document.getElementById('editGroupDesc').value.trim();
-  
   if (!name) return showToast('Введите название', 'error');
-  
   await db.collection('chats').doc(editingChatId).update({ name, description: desc });
   closeModal('editGroupModal');
   showToast('Сохранено!', 'success');
@@ -2203,44 +2532,16 @@ async function saveGroupEdit() {
 async function deleteGroup() {
   if (!editingChatId) return;
   if (!confirm('Удалить группу/канал и все сообщения?')) return;
-  
   try {
-    // Delete all messages
     const msgs = await db.collection('chats').doc(editingChatId).collection('messages').get();
     const batch = db.batch();
     msgs.forEach(doc => batch.delete(doc.ref));
     await batch.commit();
-    
-    // Delete chat
     await db.collection('chats').doc(editingChatId).delete();
-    
     closeModal('editGroupModal');
     showToast('Удалено', 'success');
   } catch(err) {
     showToast('Ошибка: ' + err.message, 'error');
-  }
-}
-
-// ===== SHARE =====
-async function shareProfile() {
-  const url = window.location.origin + window.location.pathname + '?user=' + APP.userData.username;
-  try {
-    await navigator.clipboard.writeText(url);
-    showToast('Ссылка скопирована!', 'success');
-  } catch {
-    showToast('Не удалось скопировать', 'error');
-  }
-}
-
-async function shareGroup(chatId) {
-  const chat = APP.chats.find(c => c.id === chatId);
-  if (!chat) return;
-  const url = window.location.origin + window.location.pathname + '?group=' + chatId;
-  try {
-    await navigator.clipboard.writeText(url);
-    showToast('Ссылка-приглашение скопирована!', 'success');
-  } catch {
-    showToast('Не удалось скопировать', 'error');
   }
 }
 
@@ -2251,34 +2552,24 @@ function renderProfilePanel(chatId) {
   const title = document.getElementById('profilePanelTitle');
   
   if (chatId) {
-    // Show group/channel profile
     const chat = APP.chats.find(c => c.id === chatId);
     if (!chat) return;
-    
     title.textContent = chat.name || 'Информация';
-    
     body.innerHTML = `
       <div class="profile-avatar-section">
         <div class="profile-big-avatar" style="background:var(--accent-gradient);">
           <i class="fas fa-${chat.type === 'group' ? 'users' : 'bullhorn'}"></i>
         </div>
         <div class="profile-big-name">${chat.name}</div>
-        <div class="profile-big-status">
-          <span class="badge badge-${chat.type}">${chat.type === 'group' ? 'Группа' : 'Канал'}</span>
-        </div>
+        <div class="profile-big-status"><span class="badge badge-${chat.type}">${chat.type === 'group' ? 'Группа' : 'Канал'}</span></div>
         <div class="profile-share-section">
-          <button class="share-btn" onclick="shareGroup('${chat.id}')">
-            <i class="fas fa-link"></i> Скопировать ссылку
-          </button>
-          <button class="share-btn" onclick="openEditGroupModal('${chat.id}')">
-            <i class="fas fa-edit"></i> Редактировать
-          </button>
+          <button class="share-btn" onclick="shareGroup('${chat.id}')"><i class="fas fa-link"></i> Скопировать ссылку</button>
+          <button class="share-btn" onclick="openEditGroupModal('${chat.id}')"><i class="fas fa-edit"></i> Редактировать</button>
         </div>
       </div>
       <div style="padding:20px;">
         ${chat.description ? `<div style="margin-bottom:16px;"><div style="font-size:12px;color:var(--text-secondary);text-transform:uppercase;margin-bottom:4px;">Описание</div><div style="font-size:15px;">${chat.description}</div></div>` : ''}
         <div style="margin-bottom:16px;"><div style="font-size:12px;color:var(--text-secondary);text-transform:uppercase;margin-bottom:4px;">Участники</div><div style="font-size:15px;">${chat.members?.length || 0}</div></div>
-        <div><div style="font-size:12px;color:var(--text-secondary);text-transform:uppercase;margin-bottom:4px;">Создан</div><div style="font-size:15px;">${chat.createdAt ? chat.createdAt.toDate().toLocaleDateString('ru-RU') : '—'}</div></div>
       </div>
     `;
   } else {
@@ -2289,24 +2580,16 @@ function renderProfilePanel(chatId) {
           ${!d.photoURL ? d.name.charAt(0).toUpperCase() : ''}
         </div>
         <div class="profile-big-name">${d.name}</div>
-        <div class="profile-big-username" onclick="copyUsername()">
-          @${d.username}
-          <i class="fas fa-copy copy-icon"></i>
-        </div>
+        <div class="profile-big-username" onclick="copyUsername()">@${d.username}<i class="fas fa-copy copy-icon"></i></div>
         <div class="profile-big-status">${d.bio || 'Нет био'}</div>
-        
         <div class="profile-share-section">
-          <button class="share-btn" onclick="shareProfile()">
-            <i class="fas fa-link"></i> Поделиться профилем
-          </button>
+          <button class="share-btn" onclick="shareProfile()"><i class="fas fa-link"></i> Поделиться профилем</button>
         </div>
-        
         <div class="profile-stats">
           <div class="profile-stat"><div class="profile-stat-value">${APP.chats.length}</div><div class="profile-stat-label">Чатов</div></div>
           <div class="profile-stat"><div class="profile-stat-value">${(d.music || []).length}</div><div class="profile-stat-label">Музыка</div></div>
         </div>
       </div>
-      
       <div class="music-section" style="background:var(--bg-tertiary);">
         <div class="music-section-title"><i class="fas fa-music"></i> Музыка</div>
         <div class="music-list">
@@ -2326,7 +2609,6 @@ function renderProfilePanel(chatId) {
         </div>
         <button class="add-music-btn" onclick="uploadMusic()"><i class="fas fa-plus"></i> Добавить музыку</button>
       </div>
-      
       <div style="padding:20px;">
         <div style="padding:14px 0;border-bottom:1px solid var(--border);">
           <div style="font-size:12px;color:var(--text-secondary);text-transform:uppercase;margin-bottom:4px;">Username</div>
@@ -2387,10 +2669,8 @@ async function saveProfileSettings() {
   const name = document.getElementById('settingsName').value.trim();
   const newUsername = document.getElementById('settingsUsername').value.trim().replace('@', '').toLowerCase();
   const bio = document.getElementById('settingsBio').value.trim();
-  
   if (!name) return showToast('Введите имя', 'error');
   if (!newUsername) return showToast('Введите username', 'error');
-  
   try {
     const oldUsername = APP.userData.username;
     if (newUsername !== oldUsername) {
@@ -2399,12 +2679,10 @@ async function saveProfileSettings() {
       await db.collection('usernames').doc(oldUsername).delete();
       await db.collection('usernames').doc(newUsername).set({ uid: APP.user.uid });
     }
-    
     await db.collection('users').doc(APP.user.uid).update({ name, username: newUsername, bio });
     APP.userData.name = name;
     APP.userData.username = newUsername;
     APP.userData.bio = bio;
-    
     updateSideMenu();
     closeModal('settingsModal');
     showToast('Сохранено!', 'success');
@@ -2444,18 +2722,15 @@ async function searchUser() {
   const query = document.getElementById('searchUserInput').value.trim().replace('@', '').toLowerCase();
   const results = document.getElementById('searchUserResults');
   if (!query) { results.innerHTML = ''; return; }
-  
   try {
     const snap = await db.collection('usernames')
       .where(firebase.firestore.FieldPath.documentId(), '>=', query)
       .where(firebase.firestore.FieldPath.documentId(), '<=', query + '\uf8ff')
       .limit(10).get();
-    
     if (snap.empty) {
       results.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);">Никого не найдено</div>';
       return;
     }
-    
     let html = '';
     for (const doc of snap.docs) {
       const uid = doc.data().uid;
@@ -2463,14 +2738,12 @@ async function searchUser() {
       const userDoc = await db.collection('users').doc(uid).get();
       if (userDoc.exists) {
         const u = userDoc.data();
-        html += `
-          <div class="user-select-item" onclick="startPrivateChat('${uid}')">
-            <div class="user-select-avatar" style="${u.photoURL ? `background-image:url(${u.photoURL});background-size:cover;` : ''}">
-              ${!u.photoURL ? u.name.charAt(0).toUpperCase() : ''}
-            </div>
-            <div><div style="font-weight:600;">${u.name}</div><div style="font-size:12px;color:var(--text-secondary);">@${u.username}</div></div>
+        html += `<div class="user-select-item" onclick="startPrivateChat('${uid}')">
+          <div class="user-select-avatar" style="${u.photoURL ? `background-image:url(${u.photoURL});background-size:cover;` : ''}">
+            ${!u.photoURL ? u.name.charAt(0).toUpperCase() : ''}
           </div>
-        `;
+          <div><div style="font-weight:600;">${u.name}</div><div style="font-size:12px;color:var(--text-secondary);">@${u.username}</div></div>
+        </div>`;
       }
     }
     results.innerHTML = html || '<div style="padding:20px;text-align:center;color:var(--text-secondary);">Никого не найдено</div>';
@@ -2482,7 +2755,6 @@ async function searchUser() {
 async function startPrivateChat(otherUid) {
   const existing = APP.chats.find(c => c.type === 'private' && c.members?.includes(otherUid));
   if (existing) { closeModal('newChatModal'); openChat(existing.id); return; }
-  
   try {
     await db.collection('chats').add({
       type: 'private', members: [APP.user.uid, otherUid],
@@ -2510,7 +2782,9 @@ function showToast(msg, type = 'info') {
 }
 
 function handleMsgKeydown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  if (e.key === 'Enter' && !e.shiftKey) {
+    if (APP.settings.enterSend) { e.preventDefault(); sendMessage(); }
+  }
 }
 
 function formatTime(date) {
@@ -2536,6 +2810,23 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
     if (e.target === overlay) overlay.classList.remove('active');
   });
 });
+
+function shareProfile() {
+  const url = window.location.origin + window.location.pathname + '?user=' + APP.userData.username;
+  navigator.clipboard.writeText(url).then(() => showToast('Ссылка скопирована!', 'success'));
+}
+
+function shareGroup(chatId) {
+  const url = window.location.origin + window.location.pathname + '?group=' + chatId;
+  navigator.clipboard.writeText(url).then(() => showToast('Ссылка скопирована!', 'success'));
+}
+
+function playVoice(url, btn) {
+  const audio = new Audio(url);
+  audio.play();
+  btn.innerHTML = '<i class="fas fa-pause"></i>';
+  audio.onended = () => btn.innerHTML = '<i class="fas fa-play"></i>';
+}
 </script>
 </body>
 </html>
