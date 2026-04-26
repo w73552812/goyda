@@ -56,15 +56,6 @@ body {
   overflow: hidden;
 }
 
-.auth-screen::before {
-  content: '';
-  position: absolute;
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
-  top: -200px; right: -200px;
-  border-radius: 50%;
-}
-
 .auth-container {
   background: var(--bg-secondary);
   border-radius: 24px;
@@ -118,7 +109,6 @@ body {
   border-radius: var(--radius-sm);
   font-size: 15px;
   font-weight: 600;
-  font-family: inherit;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -130,10 +120,7 @@ body {
   margin-bottom: 16px;
 }
 
-.btn-google:hover {
-  background: var(--bg-hover);
-  transform: translateY(-1px);
-}
+.btn-google:hover { background: var(--bg-hover); transform: translateY(-1px); }
 
 .btn-google i {
   font-size: 18px;
@@ -150,8 +137,7 @@ body {
   font-size: 13px;
 }
 
-.auth-divider::before,
-.auth-divider::after {
+.auth-divider::before, .auth-divider::after {
   content: '';
   flex: 1;
   height: 1px;
@@ -180,10 +166,7 @@ body {
   transition: all 0.2s;
 }
 
-.auth-tab.active {
-  background: var(--accent);
-  color: white;
-}
+.auth-tab.active { background: var(--accent); color: white; }
 
 .auth-form { display: none; }
 .auth-form.active { display: block; }
@@ -206,9 +189,8 @@ body {
   border-radius: var(--radius-sm);
   color: var(--text-primary);
   font-size: 15px;
-  font-family: inherit;
-  transition: all 0.2s;
   outline: none;
+  transition: all 0.2s;
 }
 
 .form-input:focus {
@@ -223,7 +205,6 @@ body {
   border-radius: var(--radius-sm);
   font-size: 15px;
   font-weight: 600;
-  font-family: inherit;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -242,6 +223,16 @@ body {
   transform: translateY(-1px);
   box-shadow: 0 4px 15px rgba(59,130,246,0.3);
 }
+
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover { background: var(--bg-hover); }
+
+.btn-sm { padding: 8px 16px; width: auto; }
 
 /* ===== MAIN APP ===== */
 .app { display: none; height: 100vh; }
@@ -280,10 +271,7 @@ body {
 
 .sidebar-menu-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
 
-.search-box {
-  flex: 1;
-  position: relative;
-}
+.search-box { flex: 1; position: relative; }
 
 .search-box input {
   width: 100%;
@@ -332,6 +320,13 @@ body {
   color: white;
   position: relative;
   background: var(--accent-gradient);
+  overflow: hidden;
+}
+
+.chat-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .chat-avatar.online::after {
@@ -359,7 +354,14 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
+
+.chat-type-icon { font-size: 12px; }
+.chat-type-icon.group { color: var(--warning); }
+.chat-type-icon.channel { color: var(--success); }
 
 .chat-time { font-size: 12px; color: var(--text-secondary); }
 
@@ -415,6 +417,9 @@ body {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .chat-header-status {
@@ -554,7 +559,29 @@ body {
   color: white;
   margin-bottom: 12px;
   background: rgba(255,255,255,0.2);
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
 }
+
+.side-menu-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.side-menu-avatar .upload-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.side-menu-avatar:hover .upload-overlay { opacity: 1; }
 
 .side-menu-name { font-size: 18px; font-weight: 600; }
 .side-menu-username { font-size: 13px; opacity: 0.8; margin-top: 2px; }
@@ -626,8 +653,228 @@ body {
 
 .modal-body { padding: 24px; }
 
+/* ===== PROFILE PANEL ===== */
+.profile-panel {
+  position: fixed;
+  top: 0; right: -480px;
+  width: 480px;
+  max-width: 100vw;
+  height: 100vh;
+  background: var(--bg-secondary);
+  z-index: 101;
+  transition: right 0.3s;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+}
+
+.profile-panel.active { right: 0; }
+
+.profile-panel-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-panel-body { flex: 1; overflow-y: auto; }
+
+.profile-avatar-section {
+  text-align: center;
+  padding: 32px 20px;
+  background: var(--bg-tertiary);
+  position: relative;
+}
+
+.profile-big-avatar {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 600;
+  margin: 0 auto 16px;
+  background: var(--accent-gradient);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-big-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-big-avatar .edit-avatar {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.profile-big-avatar:hover .edit-avatar { opacity: 1; }
+
+.profile-big-name { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+.profile-big-status { font-size: 14px; color: var(--accent); margin-bottom: 8px; }
+
+.profile-stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.profile-stat {
+  text-align: center;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.profile-stat:hover { background: var(--bg-hover); }
+
+.profile-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.profile-stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* MUSIC PLAYER */
+.music-section {
+  padding: 20px;
+  background: var(--bg-tertiary);
+  margin: 16px 0;
+  border-radius: var(--radius);
+}
+
+.music-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.music-section-title i { color: var(--accent); }
+
+.music-player {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.music-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.music-cover {
+  width: 50px; height: 50px;
+  border-radius: 8px;
+  background: var(--accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.music-details { flex: 1; }
+
+.music-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.music-artist {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.music-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.music-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.music-btn:hover { background: var(--accent); color: white; }
+
+.music-btn.play {
+  width: 44px; height: 44px;
+  background: var(--accent);
+  color: white;
+}
+
+.music-progress {
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.music-progress-bar {
+  height: 100%;
+  background: var(--accent);
+  width: 35%;
+  border-radius: 2px;
+}
+
+.add-music-btn {
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.add-music-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 /* ===== SETTINGS ===== */
 .settings-section { margin-bottom: 24px; }
+
 .settings-section h4 {
   font-size: 12px;
   text-transform: uppercase;
@@ -740,6 +987,13 @@ body {
   justify-content: center;
   font-weight: 600;
   background: var(--accent-gradient);
+  overflow: hidden;
+}
+
+.user-select-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .no-chat-selected {
@@ -754,69 +1008,54 @@ body {
 .no-chat-content i { font-size: 72px; margin-bottom: 16px; opacity: 0.3; }
 .no-chat-content h3 { font-size: 18px; margin-bottom: 6px; color: var(--text-primary); }
 
-/* ===== PROFILE PANEL ===== */
-.profile-panel {
-  position: fixed;
-  top: 0; right: -420px;
-  width: 420px;
-  max-width: 100vw;
-  height: 100vh;
-  background: var(--bg-secondary);
-  z-index: 101;
-  transition: right 0.3s;
-  display: flex;
-  flex-direction: column;
-  border-left: 1px solid var(--border);
+/* ===== MEDIA GALLERY ===== */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 16px;
 }
 
-.profile-panel.active { right: 0; }
-
-.profile-panel-header {
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-
-.profile-panel-body { flex: 1; overflow-y: auto; }
-
-.profile-avatar-section {
-  text-align: center;
-  padding: 32px 20px;
+.media-item {
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
   background: var(--bg-tertiary);
-}
-
-.profile-big-avatar {
-  width: 100px; height: 100px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
-  font-weight: 600;
-  margin: 0 auto 16px;
-  background: var(--accent-gradient);
+  font-size: 32px;
 }
 
-.profile-big-name { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
-.profile-big-status { font-size: 14px; color: var(--accent); }
-
-.profile-info-section { padding: 20px; }
-
-.profile-info-item {
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
+.media-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.profile-info-label {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-bottom: 4px;
-  text-transform: uppercase;
+/* ===== LOADING ===== */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
 }
 
-.profile-info-value { font-size: 15px; color: var(--accent); }
+.loading-spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== FILE INPUT HIDDEN ===== */
+.file-input-hidden {
+  display: none;
+}
 
 @media (max-width: 768px) {
   .sidebar { width: 100%; min-width: 100%; position: absolute; z-index: 10; }
@@ -898,7 +1137,9 @@ body {
         <input type="text" placeholder="Поиск..." id="searchInput" oninput="filterChats()">
       </div>
     </div>
-    <div class="chat-list" id="chatList"></div>
+    <div class="chat-list" id="chatList">
+      <div class="loading"><div class="loading-spinner"></div></div>
+    </div>
   </div>
   
   <div class="chat-area" id="chatArea">
@@ -925,6 +1166,9 @@ body {
       <div class="messages-container" id="messagesContainer"></div>
       
       <div class="message-input-area">
+        <button class="sidebar-menu-btn" onclick="attachFile()">
+          <i class="fas fa-paperclip"></i>
+        </button>
         <div class="msg-input-wrapper">
           <textarea id="messageInput" placeholder="Сообщение..." rows="1" onkeydown="handleMsgKeydown(event)"></textarea>
         </div>
@@ -936,11 +1180,19 @@ body {
   </div>
 </div>
 
+<!-- Hidden file inputs -->
+<input type="file" id="avatarInput" class="file-input-hidden" accept="image/*" onchange="handleAvatarUpload(event)">
+<input type="file" id="musicInput" class="file-input-hidden" accept="audio/*" onchange="handleMusicUpload(event)">
+
 <!-- SIDE MENU -->
 <div class="side-menu-overlay" id="sideMenuOverlay" onclick="toggleSideMenu()"></div>
 <div class="side-menu" id="sideMenu">
   <div class="side-menu-header">
-    <div class="side-menu-avatar" id="menuAvatar"></div>
+    <div class="side-menu-avatar" onclick="document.getElementById('avatarInput').click()">
+      <span id="menuAvatarText"></span>
+      <img id="menuAvatarImg" style="display:none;">
+      <div class="upload-overlay"><i class="fas fa-camera"></i></div>
+    </div>
     <div class="side-menu-name" id="menuName"></div>
     <div class="side-menu-username" id="menuUsername"></div>
   </div>
@@ -953,6 +1205,9 @@ body {
     </div>
     <div class="side-menu-item" onclick="openCreateChannelModal(); toggleSideMenu();">
       <i class="fas fa-bullhorn"></i> Создать канал
+    </div>
+    <div class="side-menu-item" onclick="openNewChatModal(); toggleSideMenu();">
+      <i class="fas fa-plus"></i> Новый чат
     </div>
     <div class="side-menu-divider"></div>
     <div class="side-menu-item" onclick="openSettings(); toggleSideMenu();">
@@ -972,7 +1227,9 @@ body {
       <i class="fas fa-times"></i>
     </button>
   </div>
-  <div class="profile-panel-body" id="profilePanelBody"></div>
+  <div class="profile-panel-body" id="profilePanelBody">
+    <!-- Dynamic content -->
+  </div>
 </div>
 
 <!-- SETTINGS MODAL -->
@@ -1000,7 +1257,7 @@ body {
           <input type="text" class="form-input" id="settingsBio">
         </div>
         <button class="btn btn-primary" onclick="saveProfileSettings()">
-          <i class="fas fa-save"></i> Сохранить изменения
+          <i class="fas fa-save"></i> Сохранить
         </button>
       </div>
       
@@ -1008,19 +1265,27 @@ body {
         <h4>Конфиденциальность</h4>
         <div class="settings-item">
           <span>Показывать статус "в сети"</span>
-          <div class="toggle" id="toggleOnline" onclick="this.classList.toggle('active')"></div>
+          <div class="toggle active" id="toggleOnline" onclick="this.classList.toggle('active')"></div>
         </div>
         <div class="settings-item">
           <span>Показывать время посещения</span>
           <div class="toggle active" id="toggleLastSeen" onclick="this.classList.toggle('active')"></div>
         </div>
         <div class="settings-item">
-          <span>Показывать фото профиля</span>
-          <div class="toggle active" id="togglePhoto" onclick="this.classList.toggle('active')"></div>
-        </div>
-        <div class="settings-item">
           <span>Разрешить добавление в группы</span>
           <div class="toggle active" id="toggleGroups" onclick="this.classList.toggle('active')"></div>
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h4>Уведомления</h4>
+        <div class="settings-item">
+          <span>Звуковые уведомления</span>
+          <div class="toggle active" id="toggleSound" onclick="this.classList.toggle('active')"></div>
+        </div>
+        <div class="settings-item">
+          <span>Push-уведомления</span>
+          <div class="toggle active" id="togglePush" onclick="this.classList.toggle('active')"></div>
         </div>
       </div>
     </div>
@@ -1106,6 +1371,7 @@ body {
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -1122,6 +1388,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+const storage = firebase.storage();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 const APP = {
@@ -1131,7 +1398,8 @@ const APP = {
   chats: [],
   messages: {},
   allUsers: [],
-  selectedMembers: []
+  selectedMembers: [],
+  musicPlaying: false
 };
 
 // ===== AUTH =====
@@ -1147,17 +1415,13 @@ async function signInWithGoogle() {
         name: user.displayName || 'User',
         username: username,
         email: user.email,
-        photoURL: user.photoURL,
+        photoURL: user.photoURL || '',
         bio: '',
         color: '#3b82f6',
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         online: true,
-        privacy: {
-          showOnline: true,
-          showLastSeen: true,
-          showPhoto: true,
-          allowGroups: true
-        }
+        privacy: { showOnline: true, showLastSeen: true, allowGroups: true },
+        music: []
       });
       await db.collection('usernames').doc(username).set({ uid: user.uid });
     } else {
@@ -1186,15 +1450,11 @@ async function handleRegister(e) {
   try {
     const cred = await auth.createUserWithEmailAndPassword(email, password);
     await db.collection('users').doc(cred.user.uid).set({
-      name, username, email, bio: '', color: '#3b82f6',
+      name, username, email, bio: '', photoURL: '', color: '#3b82f6',
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       online: true,
-      privacy: {
-        showOnline: true,
-        showLastSeen: true,
-        showPhoto: true,
-        allowGroups: true
-      }
+      privacy: { showOnline: true, showLastSeen: true, allowGroups: true },
+      music: []
     });
     await db.collection('usernames').doc(username).set({ uid: cred.user.uid });
   } catch(err) {
@@ -1204,10 +1464,11 @@ async function handleRegister(e) {
 
 async function handleLogin(e) {
   e.preventDefault();
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
   try {
-    await auth.signInWithEmailAndPassword(email, password);
+    await auth.signInWithEmailAndPassword(
+      document.getElementById('loginEmail').value.trim(),
+      document.getElementById('loginPassword').value
+    );
   } catch(err) {
     showToast(err.message, 'error');
   }
@@ -1248,13 +1509,67 @@ function showApp() {
   loadAllUsers();
 }
 
+// ===== AVATAR UPLOAD =====
+async function handleAvatarUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  try {
+    showToast('Загрузка аватара...', 'info');
+    
+    const storageRef = storage.ref(`avatars/${APP.user.uid}`);
+    await storageRef.put(file);
+    const photoURL = await storageRef.getDownloadURL();
+    
+    await db.collection('users').doc(APP.user.uid).update({ photoURL });
+    APP.userData.photoURL = photoURL;
+    updateSideMenu();
+    renderProfilePanel();
+    
+    showToast('Аватар обновлён!', 'success');
+  } catch(err) {
+    showToast('Ошибка загрузки: ' + err.message, 'error');
+  }
+}
+
+// ===== MUSIC UPLOAD =====
+async function handleMusicUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  try {
+    showToast('Загрузка музыки...', 'info');
+    
+    const storageRef = storage.ref(`music/${APP.user.uid}/${file.name}`);
+    await storageRef.put(file);
+    const musicURL = await storageRef.getDownloadURL();
+    
+    const musicData = {
+      title: file.name.replace(/\.[^/.]+$/, ""),
+      artist: APP.userData.name,
+      url: musicURL,
+      duration: 0,
+      addedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    await db.collection('users').doc(APP.user.uid).update({
+      music: firebase.firestore.FieldValue.arrayUnion(musicData)
+    });
+    
+    showToast('Музыка добавлена!', 'success');
+    renderProfilePanel();
+  } catch(err) {
+    showToast('Ошибка: ' + err.message, 'error');
+  }
+}
+
 // ===== CHATS =====
 async function loadChats() {
   const uid = APP.user.uid;
   
+  // Remove orderBy to avoid index requirement
   db.collection('chats')
     .where('members', 'array-contains', uid)
-    .orderBy('lastMessageTime', 'desc')
     .onSnapshot(async (snapshot) => {
       APP.chats = [];
       
@@ -1262,7 +1577,7 @@ async function loadChats() {
         const data = doc.data();
         const chatData = { id: doc.id, ...data };
         
-        const otherUids = data.members.filter(m => m !== uid);
+        const otherUids = (data.members || []).filter(m => m !== uid);
         chatData.otherMembers = [];
         
         for (const mUid of otherUids) {
@@ -1277,6 +1592,13 @@ async function loadChats() {
         APP.chats.push(chatData);
       }
       
+      // Sort by lastMessageTime manually
+      APP.chats.sort((a, b) => {
+        const aTime = a.lastMessageTime?.toDate()?.getTime() || 0;
+        const bTime = b.lastMessageTime?.toDate()?.getTime() || 0;
+        return bTime - aTime;
+      });
+      
       renderChatList();
     });
 }
@@ -1290,17 +1612,25 @@ function renderChatList() {
     filtered = filtered.filter(c => getChatName(c).toLowerCase().includes(search));
   }
   
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-secondary);">Нет чатов</div>';
+    return;
+  }
+  
   container.innerHTML = filtered.map(chat => {
     const name = getChatName(chat);
     const lastMsg = chat.lastMessage || 'Нет сообщений';
     const time = chat.lastMessageTime ? formatTime(chat.lastMessageTime.toDate()) : '';
     const isActive = APP.currentChat?.id === chat.id;
-    const typeIcon = chat.type === 'group' ? '<i class="fas fa-users" style="font-size:12px;color:var(--warning);margin-right:4px;"></i>' : 
-                     chat.type === 'channel' ? '<i class="fas fa-bullhorn" style="font-size:12px;color:var(--success);margin-right:4px;"></i>' : '';
+    const typeIcon = chat.type === 'group' ? '<i class="fas fa-users chat-type-icon group"></i>' : 
+                     chat.type === 'channel' ? '<i class="fas fa-bullhorn chat-type-icon channel"></i>' : '';
+    const photoURL = chat.type === 'private' && chat.otherMembers[0]?.photoURL ? chat.otherMembers[0].photoURL : null;
     
     return `
       <div class="chat-item ${isActive ? 'active' : ''}" onclick="openChat('${chat.id}')">
-        <div class="chat-avatar">${name.charAt(0).toUpperCase()}</div>
+        <div class="chat-avatar" style="${photoURL ? `background-image:url(${photoURL});background-size:cover;` : ''}">
+          ${!photoURL ? name.charAt(0).toUpperCase() : ''}
+        </div>
         <div class="chat-info">
           <div class="chat-info-top">
             <div class="chat-name">${typeIcon}${name}</div>
@@ -1332,13 +1662,24 @@ async function openChat(chatId) {
   document.getElementById('activeChatView').style.display = 'flex';
   
   const name = getChatName(chat);
-  document.getElementById('chatHeaderName').textContent = name;
-  document.getElementById('chatHeaderAvatar').textContent = name.charAt(0).toUpperCase();
+  const photoURL = chat.type === 'private' && chat.otherMembers[0]?.photoURL ? chat.otherMembers[0].photoURL : null;
+  
+  const avatar = document.getElementById('chatHeaderAvatar');
+  if (photoURL) {
+    avatar.style.backgroundImage = `url(${photoURL})`;
+    avatar.style.backgroundSize = 'cover';
+    avatar.textContent = '';
+  } else {
+    avatar.style.backgroundImage = '';
+    avatar.textContent = name.charAt(0).toUpperCase();
+  }
+  
+  document.getElementById('chatHeaderName').innerHTML = name;
   
   if (chat.type === 'private' && chat.otherMembers[0]) {
     document.getElementById('chatHeaderStatus').textContent = chat.otherMembers[0].online ? 'в сети' : 'был(а) недавно';
   } else if (chat.type === 'group') {
-    document.getElementById('chatHeaderStatus').textContent = `${chat.members.length} участников`;
+    document.getElementById('chatHeaderStatus').textContent = `${chat.members?.length || 0} участников`;
   } else {
     document.getElementById('chatHeaderStatus').textContent = 'канал';
   }
@@ -1399,7 +1740,7 @@ async function sendMessage() {
     lastMessageSender: APP.userData.name
   });
   
-  const otherMembers = chat.members.filter(m => m !== APP.user.uid);
+  const otherMembers = (chat.members || []).filter(m => m !== APP.user.uid);
   for (const uid of otherMembers) {
     const ref = db.collection('chats').doc(chatId).collection('unread').doc(uid);
     const doc = await ref.get();
@@ -1436,7 +1777,9 @@ function renderUserSelect() {
   container.innerHTML = others.map(u => `
     <div class="user-select-item ${APP.selectedMembers.includes(u.uid) ? 'selected' : ''}" 
          onclick="toggleMember('${u.uid}')">
-      <div class="user-select-avatar">${u.name.charAt(0).toUpperCase()}</div>
+      <div class="user-select-avatar" style="${u.photoURL ? `background-image:url(${u.photoURL});background-size:cover;` : ''}">
+        ${!u.photoURL ? u.name.charAt(0).toUpperCase() : ''}
+      </div>
       <div>${u.name} <span style="color:var(--text-secondary);font-size:12px;">@${u.username}</span></div>
     </div>
   `).join('');
@@ -1507,12 +1850,120 @@ async function createChannel() {
   }
 }
 
-// ===== SETTINGS =====
-function openSettings() {
-  document.getElementById('settingsModal').classList.add('active');
-  document.getElementById('settingsName').value = APP.userData?.name || '';
-  document.getElementById('settingsUsername').value = APP.userData?.username || '';
-  document.getElementById('settingsBio').value = APP.userData?.bio || '';
+// ===== PROFILE & SETTINGS =====
+function renderProfilePanel() {
+  const d = APP.userData;
+  const body = document.getElementById('profilePanelBody');
+  
+  body.innerHTML = `
+    <div class="profile-avatar-section">
+      <div class="profile-big-avatar" style="${d.photoURL ? `background-image:url(${d.photoURL});background-size:cover;` : ''}" onclick="document.getElementById('avatarInput').click()">
+        ${!d.photoURL ? d.name.charAt(0).toUpperCase() : ''}
+        <div class="edit-avatar"><i class="fas fa-camera"></i></div>
+      </div>
+      <div class="profile-big-name">${d.name}</div>
+      <div class="profile-big-status">в сети</div>
+      
+      <div class="profile-stats">
+        <div class="profile-stat" onclick="showTab('media')">
+          <div class="profile-stat-value">${Math.floor(Math.random() * 100)}</div>
+          <div class="profile-stat-label">Медиа</div>
+        </div>
+        <div class="profile-stat" onclick="showTab('music')">
+          <div class="profile-stat-value">${(d.music || []).length}</div>
+          <div class="profile-stat-label">Музыка</div>
+        </div>
+        <div class="profile-stat" onclick="showTab('files')">
+          <div class="profile-stat-value">${Math.floor(Math.random() * 50)}</div>
+          <div class="profile-stat-label">Файлы</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="music-section">
+      <div class="music-section-title">
+        <i class="fas fa-music"></i>
+        Музыка
+      </div>
+      
+      ${(d.music || []).length > 0 ? `
+        <div class="music-player">
+          <div class="music-info">
+            <div class="music-cover"><i class="fas fa-music"></i></div>
+            <div class="music-details">
+              <div class="music-title">${d.music[0].title}</div>
+              <div class="music-artist">${d.music[0].artist}</div>
+            </div>
+          </div>
+          <div class="music-controls">
+            <button class="music-btn"><i class="fas fa-step-backward"></i></button>
+            <button class="music-btn play" onclick="toggleMusic()">
+              <i class="fas fa-${APP.musicPlaying ? 'pause' : 'play'}"></i>
+            </button>
+            <button class="music-btn"><i class="fas fa-step-forward"></i></button>
+          </div>
+          <div class="music-progress">
+            <div class="music-progress-bar"></div>
+          </div>
+        </div>
+      ` : '<div style="text-align:center;color:var(--text-secondary);padding:20px;">Нет музыки</div>'}
+      
+      <button class="add-music-btn" onclick="document.getElementById('musicInput').click()">
+        <i class="fas fa-plus"></i> Добавить музыку
+      </button>
+    </div>
+    
+    <div class="profile-info-section">
+      <div class="profile-info-item">
+        <div class="profile-info-label">Username</div>
+        <div class="profile-info-value">@${d.username}</div>
+      </div>
+      <div class="profile-info-item">
+        <div class="profile-info-label">Email</div>
+        <div class="profile-info-value">${d.email}</div>
+      </div>
+      <div class="profile-info-item">
+        <div class="profile-info-label">Био</div>
+        <div class="profile-info-value">${d.bio || 'Не указано'}</div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleProfilePanel() {
+  const panel = document.getElementById('profilePanel');
+  if (panel.classList.contains('active')) {
+    panel.classList.remove('active');
+  } else {
+    renderProfilePanel();
+    panel.classList.add('active');
+  }
+}
+
+function openProfilePanel() {
+  renderProfilePanel();
+  document.getElementById('profilePanel').classList.add('active');
+}
+
+function updateSideMenu() {
+  const d = APP.userData;
+  if (!d) return;
+  
+  const avatarText = document.getElementById('menuAvatarText');
+  const avatarImg = document.getElementById('menuAvatarImg');
+  
+  if (d.photoURL) {
+    avatarImg.src = d.photoURL;
+    avatarImg.style.display = 'block';
+    avatarText.style.display = 'none';
+  } else {
+    avatarText.textContent = d.name.charAt(0).toUpperCase();
+    avatarText.style.display = 'block';
+    avatarImg.style.display = 'none';
+  }
+  
+  document.getElementById('menuName').textContent = d.name;
+  document.getElementById('menuUsername').textContent = '@' + d.username;
 }
 
 async function saveProfileSettings() {
@@ -1534,11 +1985,7 @@ async function saveProfileSettings() {
       await db.collection('usernames').doc(newUsername).set({ uid: APP.user.uid });
     }
     
-    await db.collection('users').doc(APP.user.uid).update({
-      name,
-      username: newUsername,
-      bio
-    });
+    await db.collection('users').doc(APP.user.uid).update({ name, username: newUsername, bio });
     
     APP.userData.name = name;
     APP.userData.username = newUsername;
@@ -1552,52 +1999,25 @@ async function saveProfileSettings() {
   }
 }
 
-// ===== UI HELPERS =====
-function updateSideMenu() {
-  const d = APP.userData;
-  if (!d) return;
-  document.getElementById('menuAvatar').textContent = d.name.charAt(0).toUpperCase();
-  document.getElementById('menuName').textContent = d.name;
-  document.getElementById('menuUsername').textContent = '@' + d.username;
+function openSettings() {
+  document.getElementById('settingsModal').classList.add('active');
+  document.getElementById('settingsName').value = APP.userData?.name || '';
+  document.getElementById('settingsUsername').value = APP.userData?.username || '';
+  document.getElementById('settingsBio').value = APP.userData?.bio || '';
 }
 
+// ===== UI HELPERS =====
 function toggleSideMenu() {
   document.getElementById('sideMenu').classList.toggle('active');
   document.getElementById('sideMenuOverlay').classList.toggle('active');
 }
 
-function openProfilePanel() {
-  const d = APP.userData;
-  document.getElementById('profilePanelBody').innerHTML = `
-    <div class="profile-avatar-section">
-      <div class="profile-big-avatar">${d.name.charAt(0).toUpperCase()}</div>
-      <div class="profile-big-name">${d.name}</div>
-      <div class="profile-big-status">в сети</div>
-    </div>
-    <div class="profile-info-section">
-      <div class="profile-info-item">
-        <div class="profile-info-label">Username</div>
-        <div class="profile-info-value">@${d.username}</div>
-      </div>
-      <div class="profile-info-item">
-        <div class="profile-info-label">Email</div>
-        <div class="profile-info-value">${d.email}</div>
-      </div>
-      <div class="profile-info-item">
-        <div class="profile-info-label">Био</div>
-        <div class="profile-info-value">${d.bio || 'Не указано'}</div>
-      </div>
-    </div>
-  `;
-  document.getElementById('profilePanel').classList.add('active');
-}
-
-function toggleProfilePanel() {
-  document.getElementById('profilePanel').classList.toggle('active');
-}
-
 function openCreateChannelModal() {
   document.getElementById('createChannelModal').classList.add('active');
+}
+
+function openNewChatModal() {
+  document.getElementById('newChatModal').classList.add('active');
 }
 
 function closeModal(id) {
@@ -1606,6 +2026,95 @@ function closeModal(id) {
 
 function filterChats() {
   renderChatList();
+}
+
+function attachFile() {
+  showToast('Функция загрузки файлов', 'info');
+}
+
+function toggleMusic() {
+  APP.musicPlaying = !APP.musicPlaying;
+  renderProfilePanel();
+}
+
+function showTab(tab) {
+  showToast(`Раздел: ${tab}`, 'info');
+}
+
+function openCreateGroupModal() {
+  document.getElementById('createGroupModal').classList.add('active');
+  APP.selectedMembers = [];
+  renderUserSelect();
+}
+
+async function searchUser() {
+  const query = document.getElementById('searchUserInput').value.trim().replace('@', '').toLowerCase();
+  const results = document.getElementById('searchUserResults');
+  
+  if (!query) { results.innerHTML = ''; return; }
+  
+  try {
+    const snap = await db.collection('usernames')
+      .where(firebase.firestore.FieldPath.documentId(), '>=', query)
+      .where(firebase.firestore.FieldPath.documentId(), '<=', query + '\uf8ff')
+      .limit(10).get();
+    
+    if (snap.empty) {
+      results.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);">Никого не найдено</div>';
+      return;
+    }
+    
+    let html = '';
+    for (const doc of snap.docs) {
+      const uid = doc.data().uid;
+      if (uid === APP.user.uid) continue;
+      
+      const userDoc = await db.collection('users').doc(uid).get();
+      if (userDoc.exists) {
+        const u = userDoc.data();
+        html += `
+          <div class="user-select-item" onclick="startPrivateChat('${uid}')">
+            <div class="user-select-avatar" style="${u.photoURL ? `background-image:url(${u.photoURL});background-size:cover;` : ''}">
+              ${!u.photoURL ? u.name.charAt(0).toUpperCase() : ''}
+            </div>
+            <div>
+              <div style="font-weight:600;">${u.name}</div>
+              <div style="font-size:12px;color:var(--text-secondary);">@${u.username}</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    results.innerHTML = html || '<div style="padding:20px;text-align:center;color:var(--text-secondary);">Никого не найдено</div>';
+  } catch(err) {
+    results.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);">Ошибка поиска</div>';
+  }
+}
+
+async function startPrivateChat(otherUid) {
+  const existing = APP.chats.find(c => c.type === 'private' && c.members?.includes(otherUid));
+  if (existing) {
+    closeModal('newChatModal');
+    openChat(existing.id);
+    return;
+  }
+  
+  try {
+    const ref = await db.collection('chats').add({
+      type: 'private',
+      members: [APP.user.uid, otherUid],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      lastMessageTime: firebase.firestore.FieldValue.serverTimestamp(),
+      lastMessage: '',
+      lastMessageSender: ''
+    });
+    
+    closeModal('newChatModal');
+    showToast('Чат создан', 'success');
+  } catch(err) {
+    showToast('Ошибка: ' + err.message, 'error');
+  }
 }
 
 function showToast(msg, type = 'info') {
