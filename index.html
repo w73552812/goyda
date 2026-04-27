@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nexus Messenger</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+<link rel="icon" type="image/svg+xml" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet">
@@ -50,14 +50,12 @@ body {
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 @keyframes msgIn { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 @keyframes wave { 0%,100% { height: 8px; } 50% { height: 24px; } }
 
 /* ===== AUTH ===== */
@@ -148,11 +146,12 @@ body {
 .btn-danger:hover { background: #dc2626; }
 
 /* ===== MAIN APP ===== */
-.app { display: none; height: 100vh; }
+.app { display: none; height: 100vh; transition: margin-top 0.3s ease; }
 .app.active { display: flex; animation: fadeIn 0.5s ease; }
+.app.has-player { margin-top: 60px; height: calc(100vh - 60px); }
 
 .sidebar {
-  width: 250px; min-width: 180px; max-width: 500px;
+  width: 320px; min-width: 280px; max-width: 500px;
   background: var(--bg-secondary); border-right: 1px solid var(--border);
   display: flex; flex-direction: column; position: relative;
   transition: width 0.3s ease;
@@ -217,9 +216,9 @@ body {
 .chat-item.pinned { border-left: 3px solid var(--warning); }
 
 .chat-avatar {
-  width: 48px; height: 48px; border-radius: 50%;
+  width: 50px; height: 50px; border-radius: 50%;
   flex-shrink: 0; display: flex; align-items: center;
-  justify-content: center; font-size: 18px; font-weight: 600;
+  justify-content: center; font-size: 20px; font-weight: 600;
   color: white; position: relative;
   background: var(--accent-gradient); overflow: hidden;
 }
@@ -233,7 +232,7 @@ body {
 .chat-info { flex: 1; min-width: 0; }
 .chat-info-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .chat-name {
-  font-size: 14px; font-weight: 600;
+  font-size: 15px; font-weight: 600;
   white-space: nowrap; overflow: hidden;
   text-overflow: ellipsis; display: flex; align-items: center; gap: 6px;
 }
@@ -438,6 +437,7 @@ body {
   border-top: 1px solid var(--border);
   display: flex; align-items: flex-end; gap: 8px;
   animation: slideInLeft 0.4s ease; position: relative;
+  z-index: 70; /* Ensure it's above player */
 }
 .msg-input-wrapper {
   flex: 1; background: var(--bg-tertiary);
@@ -462,7 +462,7 @@ body {
 
 /* Attachment menu */
 .attachment-menu {
-  position: absolute; bottom: 60px; right: 80px;
+  position: absolute; bottom: 70px; right: 80px;
   background: var(--bg-secondary); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 8px;
   display: none; flex-direction: column; gap: 4px;
@@ -480,7 +480,7 @@ body {
 
 /* Sticker/GIF picker */
 .sticker-gif-picker {
-  position: absolute; bottom: 60px; right: 140px;
+  position: absolute; bottom: 70px; right: 140px;
   background: var(--bg-secondary); border: 1px solid var(--border);
   border-radius: var(--radius); width: 320px;
   display: none; flex-direction: column;
@@ -527,22 +527,24 @@ body {
 /* ===== MINI PLAYER ===== */
 .mini-player {
   position: fixed; top: 0; left: 0; right: 0;
-  height: 56px; background: var(--bg-secondary);
+  height: 60px; background: var(--bg-secondary);
   border-bottom: 1px solid var(--border);
   display: none; align-items: center;
-  padding: 0 20px; gap: 16px; z-index: 50;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  padding: 0 20px; gap: 16px; z-index: 60;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
   animation: slideInLeft 0.4s ease;
+  transition: all 0.3s ease;
 }
 .mini-player.active { display: flex; }
 .mini-player-cover {
-  width: 40px; height: 40px; border-radius: 8px;
+  width: 44px; height: 44px; border-radius: 8px;
   background: var(--accent-gradient);
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px; background-size: cover; background-position: center;
+  font-size: 20px; overflow: hidden; flex-shrink: 0;
+  background-size: cover; background-position: center;
 }
 .mini-player-cover.playing { animation: pulse 1s infinite; }
-.mini-player-info { flex: 1; min-width: 0; }
+.mini-player-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
 .mini-player-title {
   font-size: 14px; font-weight: 600;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -556,7 +558,7 @@ body {
   height: 100%; background: var(--accent-gradient);
   width: 0%; transition: width 0.3s linear;
 }
-.mini-player-controls { display: flex; gap: 8px; }
+.mini-player-controls { display: flex; gap: 8px; align-items: center; }
 .mini-player-btn {
   width: 36px; height: 36px; border-radius: 50%;
   border: none; background: transparent; color: var(--text-primary);
@@ -703,7 +705,9 @@ body {
   margin: 0 auto 16px; display: flex;
   align-items: center; justify-content: center;
   font-size: 48px; color: white; background: var(--accent-gradient);
+  overflow: hidden;
 }
+.group-info-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .group-info-header h3 { font-size: 20px; margin-bottom: 4px; }
 .group-info-header p { color: var(--text-secondary); font-size: 14px; }
 
@@ -769,6 +773,7 @@ body {
   background: var(--accent-gradient);
   display: flex; align-items: center; justify-content: center;
   font-size: 16px; background-size: cover; background-position: center;
+  overflow: hidden;
 }
 .music-item-icon.playing { animation: pulse 1s infinite; }
 .music-item-info { flex: 1; }
@@ -792,6 +797,19 @@ body {
   margin-top: 8px;
 }
 .add-music-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Upload chat photo button */
+.upload-chat-photo-btn {
+  width: 100%; padding: 10px;
+  background: var(--bg-tertiary); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; margin-bottom: 16px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all 0.3s;
+}
+.upload-chat-photo-btn:hover {
+  background: var(--bg-hover); border-color: var(--accent);
+}
 
 /* ===== SETTINGS ===== */
 .settings-section { margin-bottom: 24px; }
@@ -884,51 +902,6 @@ body {
 }
 
 .file-input-hidden { display: none; }
-
-/* ===== STORY VIEWER ===== */
-.story-viewer {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.95); z-index: 300;
-  display: none; align-items: center; justify-content: center;
-  flex-direction: column;
-}
-.story-viewer.active { display: flex; }
-.story-viewer-close {
-  position: absolute; top: 20px; right: 20px;
-  width: 40px; height: 40px; border-radius: 50%;
-  border: none; background: rgba(255,255,255,0.2);
-  color: white; font-size: 20px; cursor: pointer;
-}
-.story-viewer-content {
-  max-width: 400px; width: 90%;
-  text-align: center;
-}
-.story-viewer-avatar {
-  width: 80px; height: 80px; border-radius: 50%;
-  margin: 0 auto 16px; background: var(--accent-gradient);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 32px; font-weight: 600; overflow: hidden;
-}
-.story-viewer-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.story-viewer-name { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
-.story-viewer-time { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
-.story-viewer-text {
-  font-size: 16px; line-height: 1.6;
-  padding: 20px;
-  background: rgba(255,255,255,0.1);
-  border-radius: var(--radius);
-}
-.story-viewer-progress {
-  display: flex; gap: 4px; margin-bottom: 20px;
-}
-.story-viewer-progress-bar {
-  flex: 1; height: 3px; background: rgba(255,255,255,0.3);
-  border-radius: 2px; overflow: hidden;
-}
-.story-viewer-progress-fill {
-  height: 100%; background: white;
-  border-radius: 2px; transition: width 0.3s;
-}
 
 @media (max-width: 768px) {
   .sidebar { width: 100%; min-width: 100%; position: absolute; z-index: 10; }
@@ -1102,6 +1075,7 @@ body {
 <input type="file" id="musicUploadInput" class="file-input-hidden" accept="audio/*" onchange="handleMusicUpload(this.files[0])">
 <input type="file" id="videoInput" class="file-input-hidden" accept="video/*">
 <input type="file" id="fileInput" class="file-input-hidden">
+<input type="file" id="chatPhotoInput" class="file-input-hidden" accept="image/*">
 
 <!-- SIDE MENU -->
 <div class="side-menu-overlay" id="sideMenuOverlay" onclick="toggleSideMenu()"></div>
@@ -1116,6 +1090,7 @@ body {
   </div>
   <div class="side-menu-nav">
     <div class="side-menu-item" onclick="openProfilePanel(); toggleSideMenu();"><i class="fas fa-user"></i> Профиль</div>
+    <div class="side-menu-item" onclick="openSavedMessages(); toggleSideMenu();"><i class="fas fa-bookmark"></i> Избранное</div>
     <div class="side-menu-item" onclick="openCreateGroupModal(); toggleSideMenu();"><i class="fas fa-users"></i> Создать группу</div>
     <div class="side-menu-item" onclick="openCreateChannelModal(); toggleSideMenu();"><i class="fas fa-bullhorn"></i> Создать канал</div>
     <div class="side-menu-item" onclick="openNewChatModal(); toggleSideMenu();"><i class="fas fa-plus"></i> Новый чат</div>
@@ -1191,6 +1166,10 @@ body {
   <div class="modal">
     <div class="modal-header"><h2>Новая группа</h2><button class="modal-close" onclick="closeModal('createGroupModal')"><i class="fas fa-times"></i></button></div>
     <div class="modal-body">
+      <button class="upload-chat-photo-btn" onclick="document.getElementById('groupPhotoInput').click()">
+        <i class="fas fa-camera"></i> Загрузить аватарку группы
+      </button>
+      <input type="file" id="groupPhotoInput" class="file-input-hidden" accept="image/*">
       <div class="form-group"><label>Название</label><input type="text" class="form-input" id="groupName"></div>
       <div class="form-group"><label>Описание</label><input type="text" class="form-input" id="groupDesc"></div>
       <div class="form-group"><label>Участники</label><div class="user-select-list" id="groupMembersList"></div></div>
@@ -1204,6 +1183,10 @@ body {
   <div class="modal">
     <div class="modal-header"><h2>Новый канал</h2><button class="modal-close" onclick="closeModal('createChannelModal')"><i class="fas fa-times"></i></button></div>
     <div class="modal-body">
+      <button class="upload-chat-photo-btn" onclick="document.getElementById('channelPhotoInput').click()">
+        <i class="fas fa-camera"></i> Загрузить обложку канала
+      </button>
+      <input type="file" id="channelPhotoInput" class="file-input-hidden" accept="image/*">
       <div class="form-group"><label>Название</label><input type="text" class="form-input" id="channelName"></div>
       <div class="form-group"><label>Описание</label><input type="text" class="form-input" id="channelDesc"></div>
       <button class="btn btn-primary" onclick="createChannel()"><i class="fas fa-check"></i> Создать</button>
@@ -1259,6 +1242,25 @@ body {
   </div>
 </div>
 
+<!-- EDIT GROUP MODAL -->
+<div class="modal-overlay" id="editGroupModal">
+  <div class="modal">
+    <div class="modal-header"><h2 id="editGroupTitle">Редактировать</h2><button class="modal-close" onclick="closeModal('editGroupModal')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <button class="upload-chat-photo-btn" onclick="document.getElementById('editChatPhotoInput').click()">
+        <i class="fas fa-camera"></i> Изменить аватарку
+      </button>
+      <input type="file" id="editChatPhotoInput" class="file-input-hidden" accept="image/*">
+      <div class="form-group"><label>Название</label><input type="text" class="form-input" id="editGroupName"></div>
+      <div class="form-group"><label>Описание</label><input type="text" class="form-input" id="editGroupDesc"></div>
+      <div style="display:flex;gap:12px;margin-top:16px;">
+        <button class="btn btn-primary" onclick="saveGroupEdit()"><i class="fas fa-save"></i> Сохранить</button>
+        <button class="btn btn-danger" onclick="deleteGroup()"><i class="fas fa-trash"></i> Удалить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast-container" id="toastContainer"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -1303,7 +1305,9 @@ const APP = {
   settings: {
     sound: true, notifications: true, enterSend: true,
     animations: true, darkTheme: true, fontSize: 14
-  }
+  },
+  tempGroupPhoto: null,
+  tempChannelPhoto: null
 };
 
 // ===== SIDEBAR =====
@@ -1414,6 +1418,7 @@ function formatDuration(sec) {
   return m + ':' + String(s).padStart(2, '0');
 }
 
+// Обновленная функция playMusic с поддержкой обложек
 async function playMusic(trackUrl, title, artist, index, coverUrl) {
   initAudioPlayer();
   APP.audioPlayer.src = trackUrl;
@@ -1425,14 +1430,16 @@ async function playMusic(trackUrl, title, artist, index, coverUrl) {
   document.getElementById('miniPlayerPlayIcon').className = 'fas fa-pause';
   document.getElementById('miniPlayer').classList.add('active');
   document.getElementById('miniPlayerCover').classList.add('playing');
+  
+  const coverEl = document.getElementById('miniPlayerCover');
   if (coverUrl) {
-    document.getElementById('miniPlayerCover').style.backgroundImage = `url(${coverUrl})`;
-    document.getElementById('miniPlayerCover').innerHTML = '';
+    coverEl.innerHTML = `<img src="${coverUrl}" style="width:100%;height:100%;object-fit:cover;">`;
   } else {
-    document.getElementById('miniPlayerCover').style.backgroundImage = '';
-    document.getElementById('miniPlayerCover').innerHTML = '<i class="fas fa-music"></i>';
+    coverEl.innerHTML = '<i class="fas fa-music"></i>';
   }
-  updateMiniPlayerLayout();
+  
+  // Сдвигаем приложение вниз, чтобы меню ввода было видно
+  document.getElementById('mainApp').classList.add('has-player');
 }
 
 function togglePlay() {
@@ -1468,21 +1475,9 @@ function closeMiniPlayer() {
   APP.isPlaying = false;
   APP.currentTrackIndex = -1;
   document.getElementById('miniPlayer').classList.remove('active');
-  updateMiniPlayerLayout();
-}
-
-function updateMiniPlayerLayout() {
-  const active = document.getElementById('miniPlayer').classList.contains('active');
-  document.getElementById('mainApp').style.marginTop = active ? '56px' : '0';
-  const stickerPicker = document.getElementById('stickerGifPicker');
-  const attachMenu = document.getElementById('attachmentMenu');
-  if (active) {
-    stickerPicker.style.bottom = '140px';
-    attachMenu.style.bottom = '140px';
-  } else {
-    stickerPicker.style.bottom = '60px';
-    attachMenu.style.bottom = '60px';
-  }
+  document.getElementById('miniPlayerCover').classList.remove('playing');
+  document.getElementById('miniPlayerCover').innerHTML = '<i class="fas fa-music"></i>';
+  document.getElementById('mainApp').classList.remove('has-player');
 }
 
 // ===== MUSIC UPLOAD =====
@@ -1496,24 +1491,51 @@ async function handleMusicUpload(file) {
     formData.append('resource_type', 'video');
     const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`, { method: 'POST', body: formData });
     const data = await response.json();
-    const coverUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(file.name.charAt(0))}&background=3b82f6&color=fff&size=128`;
-    const musicData = {
-      title: file.name.replace(/\.[^/.]+$/, ''),
-      artist: APP.userData.name,
-      url: data.secure_url,
-      coverUrl: coverUrl,
-      duration: data.duration || 0,
-      addedAt: new Date().toISOString()
-    };
-    if (!APP.userData.music) APP.userData.music = [];
-    APP.userData.music.push(musicData);
-    await db.collection('users').doc(APP.user.uid).update({ music: APP.userData.music });
-    showToast('Музыка добавлена!', 'success');
-    renderProfilePanel();
-    document.getElementById('attachmentMenu').classList.remove('active');
+    
+    // Спрашиваем про обложку
+    const useCustomCover = confirm('Загрузить свою обложку? (Отмена = по умолчанию)');
+    let coverUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(file.name.charAt(0))}&background=3b82f6&color=fff&size=128`;
+
+    if (useCustomCover) {
+      const imgInput = document.createElement('input');
+      imgInput.type = 'file'; imgInput.accept = 'image/*';
+      imgInput.click();
+      
+      imgInput.onchange = async (e) => {
+        const imgFile = e.target.files[0];
+        if (imgFile) {
+          const imgData = new FormData();
+          imgData.append('file', imgFile);
+          imgData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+          const imgRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: imgData });
+          const imgJson = await imgRes.json();
+          if (imgJson.secure_url) coverUrl = imgJson.secure_url;
+        }
+        saveMusicToDB(file, data, coverUrl);
+      };
+    } else {
+      saveMusicToDB(file, data, coverUrl);
+    }
   } catch(err) {
     showToast('Ошибка: ' + err.message, 'error');
   }
+}
+
+async function saveMusicToDB(file, cloudData, coverUrl) {
+  const musicData = {
+    title: file.name.replace(/\.[^/.]+$/, ''),
+    artist: APP.userData.name,
+    url: cloudData.secure_url,
+    coverUrl: coverUrl,
+    duration: cloudData.duration || 0,
+    addedAt: new Date().toISOString()
+  };
+  if (!APP.userData.music) APP.userData.music = [];
+  APP.userData.music.push(musicData);
+  await db.collection('users').doc(APP.user.uid).update({ music: APP.userData.music });
+  showToast('Музыка добавлена!', 'success');
+  renderProfilePanel();
+  document.getElementById('attachmentMenu').classList.remove('active');
 }
 
 function deleteMusic(index) {
@@ -1934,6 +1956,54 @@ document.getElementById('fileInput')?.addEventListener('change', function(e) {
   handleFileUpload(this);
 });
 
+// ===== GROUP/CHANNEL PHOTO UPLOAD HANDLERS =====
+document.getElementById('groupPhotoInput')?.addEventListener('change', async function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    showToast('Загрузка фото...', 'info');
+    try {
+      const url = await uploadToCloudinary(file);
+      APP.tempGroupPhoto = url;
+      showToast('Фото загружено!', 'success');
+    } catch(err) {
+      showToast('Ошибка загрузки', 'error');
+    }
+  }
+});
+
+document.getElementById('channelPhotoInput')?.addEventListener('change', async function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    showToast('Загрузка фото...', 'info');
+    try {
+      const url = await uploadToCloudinary(file);
+      APP.tempChannelPhoto = url;
+      showToast('Фото загружено!', 'success');
+    } catch(err) {
+      showToast('Ошибка загрузки', 'error');
+    }
+  }
+});
+
+document.getElementById('editChatPhotoInput')?.addEventListener('change', async function(e) {
+  const file = e.target.files[0];
+  if (file && editingChatId) {
+    showToast('Загрузка фото...', 'info');
+    try {
+      const url = await uploadToCloudinary(file);
+      await db.collection('chats').doc(editingChatId).update({ photoURL: url });
+      showToast('Фото обновлено!', 'success');
+      // Обновляем локально
+      const chat = APP.chats.find(c => c.id === editingChatId);
+      if (chat) chat.photoURL = url;
+      renderChatList();
+      if (APP.currentChat?.id === editingChatId) openChat(editingChatId);
+    } catch(err) {
+      showToast('Ошибка', 'error');
+    }
+  }
+});
+
 // ===== CHATS =====
 async function loadChats() {
   const uid = APP.user.uid;
@@ -1990,13 +2060,17 @@ function renderChatList() {
     const isActive = APP.currentChat?.id === chat.id;
     const typeIcon = chat.type === 'group' ? '<i class="fas fa-users chat-type-icon group"></i>' :
                      chat.type === 'channel' ? '<i class="fas fa-bullhorn chat-type-icon channel"></i>' : '';
-    const photoURL = chat.type === 'private' && chat.otherMembers[0]?.photoURL ? chat.otherMembers[0].photoURL : null;
+    
+    // Приоритет: 1. Фото группы, 2. Фото юзера в личке, 3. Буква
+    const photoURL = chat.photoURL || (chat.type === 'private' && chat.otherMembers[0]?.photoURL ? chat.otherMembers[0].photoURL : null);
     const isPinned = chat.pinned;
     return `
       <div class="chat-item ${isActive ? 'active' : ''} ${isPinned ? 'pinned' : ''}" onclick="openChat('${chat.id}')">
         <div class="chat-avatar ${chat.type === 'private' && chat.otherMembers[0]?.online ? 'online' : ''}"
-             style="${photoURL ? `background-image:url(${photoURL});background-size:cover;` : ''}">
-          ${!photoURL ? name.charAt(0).toUpperCase() : ''}
+             style="${photoURL ? 'background:transparent;padding:0;' : ''}">
+          ${photoURL 
+            ? `<img src="${photoURL}" class="avatar-image">` 
+            : name.charAt(0).toUpperCase()}
         </div>
         <div class="chat-info">
           <div class="chat-info-top">
@@ -2033,7 +2107,7 @@ async function openChat(chatId) {
   document.getElementById('noChatSelected').style.display = 'none';
   document.getElementById('activeChatView').style.display = 'flex';
   const name = getChatName(chat);
-  const photoURL = chat.type === 'private' && chat.otherMembers[0]?.photoURL ? chat.otherMembers[0].photoURL : null;
+  const photoURL = chat.photoURL || (chat.type === 'private' && chat.otherMembers[0]?.photoURL ? chat.otherMembers[0].photoURL : null);
   const avatar = document.getElementById('chatHeaderAvatar');
   if (photoURL) {
     avatar.style.backgroundImage = `url(${photoURL})`;
@@ -2289,6 +2363,7 @@ async function loadAllUsers() {
 function openCreateGroupModal() {
   document.getElementById('createGroupModal').classList.add('active');
   APP.selectedMembers = [];
+  APP.tempGroupPhoto = null;
   renderUserSelect();
 }
 
@@ -2320,6 +2395,7 @@ async function createGroup() {
   try {
     await db.collection('chats').add({
       type: 'group', name, description: desc,
+      photoURL: APP.tempGroupPhoto || '',
       members: [APP.user.uid, ...APP.selectedMembers],
       createdBy: APP.user.uid,
       createdAt: new Date(),
@@ -2342,6 +2418,7 @@ async function createChannel() {
   try {
     const channelRef = await db.collection('chats').add({
       type: 'channel', name, description: desc,
+      photoURL: APP.tempChannelPhoto || '',
       members: [APP.user.uid], subscribers: [APP.user.uid],
       admins: [APP.user.uid], createdBy: APP.user.uid,
       createdAt: new Date(),
@@ -2376,7 +2453,9 @@ function renderGroupInfoPanel(chatId) {
   
   return `
     <div class="group-info-header">
-      <div class="group-info-avatar"><i class="fas fa-${chat.type === 'group' ? 'users' : 'bullhorn'}"></i></div>
+      <div class="group-info-avatar">
+        ${chat.photoURL ? `<img src="${chat.photoURL}">` : `<i class="fas fa-${chat.type === 'group' ? 'users' : 'bullhorn'}"></i>`}
+      </div>
       <h3>${chat.name}</h3>
       <p>${chat.members?.length || 0} участников</p>
     </div>
@@ -2480,6 +2559,29 @@ async function leaveGroup(chatId) {
   }
   toggleProfilePanel();
   showToast('Вы покинули группу', 'info');
+}
+
+// ===== SAVED MESSAGES =====
+async function openSavedMessages() {
+  const uid = APP.user.uid;
+  // Check if saved messages chat exists
+  let chat = APP.chats.find(c => c.type === 'private' && c.members.length === 1 && c.members[0] === uid);
+  
+  if (!chat) {
+    // Create saved messages chat
+    const ref = await db.collection('chats').add({
+      type: 'private', members: [uid],
+      name: 'Избранное',
+      createdAt: new Date(),
+      lastMessageTime: new Date(),
+      lastMessage: 'Это ваши сохранённые сообщения', lastMessageSender: 'Система'
+    });
+    chat = { id: ref.id, type: 'private', members: [uid], name: 'Избранное', otherMembers: [] };
+    APP.chats.unshift(chat);
+  }
+  
+  closeModal('newChatModal');
+  openChat(chat.id);
 }
 
 // ===== PROFILE =====
@@ -2789,6 +2891,7 @@ function toggleSideMenu() {
 
 function openCreateChannelModal() {
   document.getElementById('createChannelModal').classList.add('active');
+  APP.tempChannelPhoto = null;
 }
 
 function openNewChatModal() {
@@ -2906,27 +3009,6 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) overlay.classList.remove('active');
   });
-});
-
-// Add edit group modal HTML
-document.addEventListener('DOMContentLoaded', () => {
-  const modal = document.createElement('div');
-  modal.className = 'modal-overlay';
-  modal.id = 'editGroupModal';
-  modal.innerHTML = `
-    <div class="modal">
-      <div class="modal-header"><h2 id="editGroupTitle">Редактировать</h2><button class="modal-close" onclick="closeModal('editGroupModal')"><i class="fas fa-times"></i></button></div>
-      <div class="modal-body">
-        <div class="form-group"><label>Название</label><input type="text" class="form-input" id="editGroupName"></div>
-        <div class="form-group"><label>Описание</label><input type="text" class="form-input" id="editGroupDesc"></div>
-        <div style="display:flex;gap:12px;margin-top:16px;">
-          <button class="btn btn-primary" onclick="saveGroupEdit()"><i class="fas fa-save"></i> Сохранить</button>
-          <button class="btn btn-danger" onclick="deleteGroup()"><i class="fas fa-trash"></i> Удалить</button>
-        </div>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
 });
 </script>
 </body>
